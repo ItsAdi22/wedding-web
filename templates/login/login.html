@@ -1,0 +1,35 @@
+{% extends 'header.html' %}
+
+{% block logincss %}
+<style>
+    /* Add your custom styles here */
+    body {
+        padding-top: 56px; /* Adjusted for the fixed navbar height */
+    }
+
+    .form-container {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+</style>
+{% endblock logincss %}
+
+{% block login %}
+<div class="container mt-5 form-container">
+    <form>
+        <h2 class="text-center mb-4">Login</h2>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+    </form>
+</div>
+{% endblock login %}
