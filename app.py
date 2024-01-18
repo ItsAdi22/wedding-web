@@ -18,7 +18,7 @@ app.config["MYSQL_PASSWORD"] = os.getenv('MYSQL_PASSWORD')
 def createtables():
     try:
         cursor = mysql.connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS users ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL );")
+        cursor.execute("CREATE TABLE IF NOT EXISTS users ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL );")
 
     except Exception as e:
         print(f"ERROR OCCURRED: {e}")
@@ -28,45 +28,48 @@ def createtables():
 def home():
     return render_template('home.html')
 
-@app.route('/signup',methods=['GET','POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    createtables()
+    createtables()  # Ensure the table exists
+
     form = SignupForm()
     if form.validate_on_submit():
-            userName = request.form.get("userName")
-            email = request.form.get("email")
-            password = request.form.get("password")
+        userName = request.form.get("userName")
+        email = request.form.get("email")
+        password = request.form.get("password")
 
-            try:
-                cursor = mysql.connection.cursor()
-                cursor.execute('SELECT * FROM users WHERE email = %s',(email,))
-                account = cursor.fetchone()
-            
-            except Exception as e:
-                print(f"ERROR OCCURRED: {e}")
-                return redirect(url_for('home'))
+        try:
+            cursor = mysql.connection.cursor()
+            cursor.execute('SELECT * FROM users WHERE email = %s', (email,))
+            account = cursor.fetchone()
+
+        except Exception as e:
+            print(f"ERROR OCCURRED: {e}")
+            return redirect(url_for('home'))
+
+        else:
+            if account:
+                flash("Email already used! Please use a different email address")
+                return redirect(url_for('signup'))
 
             else:
-                account = cursor.fetchone()
-                if account:
-                    flash("Email already used! Please use different email address")
-                    return render_template('login/signup.html')   
-                
-                else:
-                    sql = "INSERT INTO users (name,email,password) VALUES(%s,%s,%s)"
-                    value = (userName,email,password)
-                    cursor.execute(sql,value)
-                    mysql.connection.commit()
-                    cursor.close() 
-                    flash("User Registration Successful!")
-                    return redirect(url_for('signup'))
+                sql = "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)"
+                value = (userName, email, password)
+                cursor.execute(sql, value)
+                mysql.connection.commit()
+                cursor.close()
+                flash("User Registration Successful!")
+                return redirect(url_for('signup'))
+
     else:
-        return render_template('login/signup.html',form=SignupForm())
+        return render_template('login/signup.html', form=SignupForm())
 
 @app.route('/login',methods=['POST','GET'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
+        cursor = mysql.connection.cursor()
+
         email = request.form.get("email")
         password = request.form.get("password")
         return "Login Successful"
