@@ -25,9 +25,16 @@ def signup():
     else:
         return render_template('login/signup.html',form=SignupForm())
 
-@app.route('/login')
+@app.route('/login',methods=['POST','GET'])
 def login():
-    return render_template('login/login.html',form=SignupForm())
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = request.form.get("email")
+        password = request.form.get("password")
+        return "Login Successful"
+    
+    else:
+        return render_template('login/login.html',form=LoginForm())
 
 app.run(port=80,debug=True)
 

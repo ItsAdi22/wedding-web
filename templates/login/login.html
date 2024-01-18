@@ -16,20 +16,21 @@
 
 {% block login %}
 <div class="container mt-5 form-container">
-    <form>
+    <form method="POST" action="{{ url_for('login') }}">
+        {{ form.hidden_tag() }}
         <h2 class="text-center mb-4">Login</h2>
 
         <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+            <label for="{{ form.email.id }}">Email</label>
+            {{ form.email(class="form-control", placeholder="Enter your email", required="required") }}
         </div>
 
         <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+            <label for="{{ form.password.id }}">Password</label>
+            {{ form.password(class="form-control", placeholder="Enter your password", required="required") }}
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        {{ form.submit(class="btn btn-primary btn-block") }}
     </form>
 </div>
 {% endblock login %}
