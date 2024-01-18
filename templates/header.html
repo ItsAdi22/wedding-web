@@ -48,6 +48,14 @@
     {% block signup %} {% endblock signup %}
     {% block login %} {% endblock login %}
 
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+            <div class="alert alert-info" role="alert">{{msg}}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
