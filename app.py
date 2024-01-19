@@ -18,10 +18,15 @@ def createtables():
     try:
         cursor = mysql.connection.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS users ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL );")
+        cursor.execute("CREATE TABLE IF NOT EXISTS wedding_details ( id INT AUTO_INCREMENT PRIMARY KEY, theme VARCHAR(255) NOT NULL, grooms_name VARCHAR(255) NOT NULL, brides_name VARCHAR(255) NOT NULL, wedding_date DATE NOT NULL, wedding_location TEXT NOT NULL, city_name VARCHAR(255) NOT NULL, location_url VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL );")
 
     except Exception as e:
         print(f"ERROR OCCURRED: {e}")
         flash(f"ERROR OCCURRED: {e}")
+        return redirect(url_for('home'))
+    
+    else:
+        flash("Created missing tables (if any)")
         return redirect(url_for('home'))
     
 @app.route('/')
@@ -123,23 +128,92 @@ def create():
     if 'email' in session:
         form = WeddingDetailsForm()
         if form.validate_on_submit():
-            # Process the form data as needed
+            theme = request.form.get("theme")
             grooms_name = request.form.get("grooms_name")
             brides_name = request.form.get("brides_name")
             wedding_date = request.form.get("wedding_date")
             wedding_location = request.form.get("wedding_location")
             city_name = request.form.get("city_name")
+            location_url = request.form.get("location_url")
 
-            flash(f'{grooms_name}-{brides_name}-{wedding_date}-{wedding_location}-{city_name}')
-            print(f'{grooms_name}-{brides_name}-{wedding_date}-{wedding_location}-{city_name}')
-            return redirect(request.referrer)
-        
-        return render_template('dashboard.html',form=form)
+            try:
+                cursor = mysql.connection.cursor()
+            
+            except Exception as e:
+                flash(f'ERROR OCCURRED: {e}')
+                return redirect(url_for('home'))
+            
+            else:
+                email = session['email']
+                cursor.execute("SELECT * FROM wedding_details WHERE email = %s", (email,))
+                existing_record = cursor.fetchone()
+                
+                if existing_record:
+                    cursor.execute("UPDATE wedding_details SET theme = %s, grooms_name = %s, brides_name = %s, wedding_date = %s, wedding_location = %s, city_name = %s, location_url = %s WHERE email = %s", (theme,grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url, email))
+                    mysql.connection.commit()
+
+                else:
+                    cursor.execute("INSERT INTO wedding_details (theme, grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url, email) VALUES (%s,%s, %s, %s, %s, %s, %s, %s)", (theme,grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url, email))
+                    mysql.connection.commit()
+                
+                cursor.close()
+                flash("Data Updated!")
+            return redirect(url_for('create'))
+        else:
+            return render_template('dashboard.html',form=form)
     else:
         return redirect(url_for('login'))
+    
+
+@app.route("/<userinput>")
+@app.route("/page/<userinput>")
+def userpage(userinput):
+        if not userinput.isdigit():
+            return redirect(url_for('home'))
+        
+        else:
+            try:
+                cursor = mysql.connection.cursor()
+                sql = "SELECT email FROM users WHERE id = %s;"
+                cursor.execute(sql, (userinput,))
+                
+            except Exception as e:
+                flash(f'ERROR OCCURRED: {e}')
+                return redirect(url_for('home'))
+            
+            else:
+                useridfound = cursor.fetchone()
+                
+                if useridfound:
+                    sql = "SELECT theme, grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url FROM wedding_details WHERE email = %s"
+                    value = (useridfound)
+                    cursor.execute(sql,value)
+                    data = cursor.fetchone()
+                    try:
+                        theme = data[0]
+                        grooms_name = data[1]
+                        brides_name = data[2]
+                        wedding_date = data[3]
+                        wedding_location = data[4] 
+                        city_name = data[5] 
+                        location_url = data[6]
+                    
+                    except Exception as e:
+                        print(f'SOME OR ALL DATA IS MISSING: {e}')
+                        return redirect(url_for('home'))
+                    
+                    else:
+                        return render_template(f'{theme}/index.html',grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url)
+                else:
+                    print("user not found")
+                    return redirect(url_for('home'))
+
+
 
 @app.route('/create/view1')
 def view():
-    return render_template('wedding/index.html')
-app.run(port=80,debug=True)
+    return render_template('template1/index.html')
+
+if __name__ == '__main__':
+    app.run(port=80,debug=True)
 

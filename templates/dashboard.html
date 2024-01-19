@@ -21,6 +21,11 @@
         <h2 class="text-center mb-4">Wedding Details</h2>
 
         <div class="form-group">
+            {{ form.theme.label(class="form-label") }}
+            {{ form.theme(class="form-control") }}
+        </div>
+
+        <div class="form-group">
             {{ form.grooms_name.label(class="form-label") }}
             {{ form.grooms_name(class="form-control", placeholder="Enter groom's name") }}
         </div>
@@ -43,6 +48,11 @@
         <div class="form-group">
             {{ form.city_name.label(class="form-label") }}
             {{ form.city_name(class="form-control", placeholder="Enter city name") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.location_url.label(class="form-label") }}
+    {{ form.location_url(class="form-control", placeholder="Enter location URL [google maps link]") }}
         </div>
 
         {{ form.submit(class="btn btn-primary btn-block") }}

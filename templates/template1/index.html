@@ -6,8 +6,8 @@
     <title>Wedding</title>
     
     <link href="https://fonts.googleapis.com/css?family=Alice|Zilla+Slab:400,700" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='wedding/css/styles-merged.css') }}">
-    <link rel="stylesheet" href="{{url_for('static', filename='wedding/css/style.min.css')}}" >
+    <link rel="stylesheet" href="{{ url_for('static', filename='template1/css/styles-merged.css') }}">
+    <link rel="stylesheet" href="{{url_for('static', filename='template1/css/style.min.css')}}" >
 
     <!--[if lt IE 9]>
       <script src="js/vendor/html5shiv.min.js"></script>
@@ -27,7 +27,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.html" title="Wedding">Jake <em>&amp;</em> Kate</a>
+          <a class="navbar-brand" href="index.html" title="Wedding">{{grooms_name}} <em>&amp;</em> {{brides_name}}</a>
         </div>
 
         <div id="navbar-collapse" class="navbar-collapse collapse">
@@ -46,15 +46,15 @@
       <div class="container text-intro-wrap">
         <div class="row">
           <div class="col-md-12 text-center text-intro probootstrap-animate">
-            <h1>Jake <em>&amp;</em> Kate</h1>
-            <h2>Getting Married on April 20, 2019 &mdash; Brooklyn, NYC</h2>
+            <h1>{{grooms_name}} <em>&amp;</em> {{brides_name}}</h1>
+            <h2>Getting Married on {{wedding_date}} &mdash; {{city_name}}</h2>
           </div>
         </div>
       </div>
       <ul class="slides">
-        <li style="background-image: url({{url_for('static',filename='wedding/img/hero_bg_1.jpg')}})" data></li>
-        <li style="background-image: url({{url_for('static',filename='wedding/img/hero_bg_2.jpg')}})" data></li>
-        <li style="background-image: url({{url_for('static',filename='wedding/img/hero_bg_3.jpg')}})" data></li>
+        <li style="background-image: url({{url_for('static',filename='template1/img/hero_bg_1.jpg')}})" data></li>
+        <li style="background-image: url({{url_for('static',filename='template1/img/hero_bg_2.jpg')}})" data></li>
+        <li style="background-image: url({{url_for('static',filename='template1/img/hero_bg_3.jpg')}})" data></li>
 
       </ul>
     </section>
@@ -77,10 +77,10 @@
             
             <div class="probootstrap-groom probootstrap-animate">
               <figure>
-                <img src="{{url_for('static', filename='wedding/img/groom_1.jpg')}}" alt="change_this_later" class="img-responsive">
+                <img src="{{url_for('static', filename='template1/img/groom_1.jpg')}}" alt="change_this_later" class="img-responsive">
               </figure>
               <span class="probootstrap-caption">The Groom</span>
-              <h2 class="text-center">Jake Wilson</h2>
+              <h2 class="text-center">{{grooms_name}}</h2>
               <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
     <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth question ran over her cheek, then she continued her way.</p>
             </div>
@@ -89,10 +89,10 @@
 
             <div class="probootstrap-bride probootstrap-animate">
               <figure>
-                <img src="{{url_for('static', filename='wedding/img/bride_1.jpg')}}" alt="change_this_later" class="img-responsive">
+                <img src="{{url_for('static', filename='template1/img/bride_1.jpg')}}" alt="change_this_later" class="img-responsive">
               </figure>
               <span class="probootstrap-caption">The Bride</span>
-              <h2 class="text-center">Kate Marie</h2>
+              <h2 class="text-center">{{brides_name}}</h2>
               <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
     <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way.</p>
             </div>
@@ -122,7 +122,13 @@
         </div>
       </div>
     </div>
-    <div id="map"></div>
+    <div id="map">
+      <center>
+        <br><br>
+        <a href="{{location_url}}" target="_blank"><button class="btn btn-primary btn-lg">View Location on Google Maps</button></a>
+      </center>
+        
+    </div>
 
     <section class="probootstrap-section" data-section="gallery">
       <div class="container">
@@ -293,8 +299,8 @@
 
 
     
-    <script src="{{url_for('static', filename='wedding/js/scripts.min.js')}}"></script>
-    <script src="{{url_for('static', filename='wedding/js/custom.min.js')}}"></script>
+    <script src="{{url_for('static', filename='template1/js/scripts.min.js')}}"></script>
+    <script src="{{url_for('static', filename='template1/js/custom.min.js')}}"></script>
 
 
     <!-- Google Map -->
