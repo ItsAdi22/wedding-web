@@ -245,7 +245,7 @@
         <div class="row">
           <div class="col-md-6 col-md-offset-3">
             <div class="probootstrap-card probootstrap-animate">
-              <form class="probootstrap-form" method="POST" action="{{ reservation }}">
+              <form class="probootstrap-form" method="POST" action="{{ url_for('reservation') }}">
                 {{ form.csrf_token }}
                 
                 <div class="form-group">
@@ -315,9 +315,6 @@
     <script src="{{url_for('static', filename='template1/js/custom.min.js')}}"></script>
 
 
-    <!-- Google Map -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-    <script src="js/google-map.js"></script>
 
   </body>
 </html>

@@ -226,11 +226,11 @@ def userpage(userinput):
                     print("user not found")
                     return redirect(url_for('home'))
 
-@app.route('/reservation', methods=['POST'])
+@app.route('/reservation',methods=['POST'])
 def reservation():
     form = ReservationForm()
-
-    if form.validate_on_submit():
+    
+    if form.is_submitted():
         wedding_id = request.form.get("wedding_id")
         name = request.form.get("name")
         email = request.form.get("email")
@@ -241,19 +241,20 @@ def reservation():
 
         try:
             cursor = mysql.connection.cursor()
-            cursor.execute("INSERT INTO reservation (wedding_id, name, email, phone, will_attend_yes, will_attend_no, note) VALUES (%s, %s, %s, %s, %s, %s, %s);", (wedding_id, name, email, phone, will_attend_yes, will_attend_no, note))
-            mysql.connection.commit()
-            flash("Data Submitted :)")
-            return redirect('home')
-
+        
         except Exception as e:
             flash(f'ERROR OCCURRED: {e}')
             print(f'ERROR OCCURRED: {e}')
             return redirect(url_for('home'))
-
-        finally:
-            cursor.close()
-
+            
+        
+        else:
+            cursor.execute("INSERT INTO reservation (wedding_id, name, email, phone, will_attend_yes, will_attend_no, note) VALUES (%s, %s, %s, %s, %s, %s, %s);", (wedding_id, name, email, phone, will_attend_yes, will_attend_no, note))
+            mysql.connection.commit()
+            cursor.close()  
+            flash("Data Submitted :)")
+            return redirect(url_for('home'))
+        
     else:
         flash("Alert: Form not validated")
         print("Alert: Form not validated")
