@@ -36,30 +36,34 @@ def signup():
         userName = request.form.get("userName")
         email = request.form.get("email")
         password = request.form.get("password")
+        confpassword = request.form.get("confpassword")
 
-        try:
-            cursor = mysql.connection.cursor()
-            cursor.execute('SELECT * FROM users WHERE email = %s', (email,))
-            account = cursor.fetchone()
+        if password == confpassword:
+            try:
+                cursor = mysql.connection.cursor()
+                cursor.execute('SELECT * FROM users WHERE email = %s', (email,))
+                account = cursor.fetchone()
 
-        except Exception as e:
-            print(f"ERROR OCCURRED: {e}")
-            return redirect(url_for('home'))
-
-        else:
-            if account:
-                flash("Email already used! Please use a different email address")
-                return redirect(url_for('signup'))
+            except Exception as e:
+                print(f"ERROR OCCURRED: {e}")
+                return redirect(url_for('home'))
 
             else:
-                sql = "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)"
-                value = (userName, email, password)
-                cursor.execute(sql, value)
-                mysql.connection.commit()
-                cursor.close()
-                flash("User Registration Successful!")
-                return redirect(url_for('login'))
+                if account:
+                    flash("Email already used! Please use a different email address")
+                    return redirect(url_for('signup'))
 
+                else:
+                    sql = "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)"
+                    value = (userName, email, password)
+                    cursor.execute(sql, value)
+                    mysql.connection.commit()
+                    cursor.close()
+                    flash("User Registration Successful!")
+                    return redirect(url_for('login'))
+        else:
+            flash("Password and confirmpassword fields should match!")
+            return redirect(url_for('signup'))
     else:
         return render_template('login/signup.html', form=SignupForm())
 
