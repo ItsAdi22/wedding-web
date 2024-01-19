@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, Form,TextAreaField, DateField, URLField, SelectField
+from wtforms import StringField, PasswordField, SubmitField,TextAreaField, DateField, URLField, SelectField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, Email, Length
 
 
@@ -25,3 +25,13 @@ class WeddingDetailsForm(FlaskForm):
     city_name = StringField('City Name of Wedding Location', validators=[DataRequired(), Length(max=255)])
     location_url = URLField('Location URL', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+class ReservationForm(FlaskForm):
+    wedding_id = IntegerField('Wedding ID', validators=[DataRequired()])
+    name = StringField('Your Name', validators=[DataRequired(), Length(max=255)])
+    email = StringField('Your Email', validators=[DataRequired(), Email(), Length(max=255)])
+    phone = StringField('Your Phone No.', validators=[DataRequired(), Length(max=15)])  # Assuming phone number is a string
+    will_attend_yes = BooleanField('Yes, I will be there')
+    will_attend_no = BooleanField("Sorry, I can't come")
+    note = TextAreaField('Note', validators=[Length(max=1000)])  # Adjust the max length as needed
+    submit = SubmitField('Send RSVP')

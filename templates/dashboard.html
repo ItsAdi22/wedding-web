@@ -15,10 +15,12 @@
 
 {% block details %}
 <div class="container mt-5 form-container">
+    
     <form method="POST" action="{{ url_for('create') }}">
         {{ form.csrf_token }}
 
         <h2 class="text-center mb-4">Wedding Details</h2>
+        <h6>YOUR WEDDING ID: {{wedding_id[0]}}</h6>
 
         <div class="form-group">
             {{ form.theme.label(class="form-label") }}
@@ -52,7 +54,7 @@
 
         <div class="form-group">
             {{ form.location_url.label(class="form-label") }}
-    {{ form.location_url(class="form-control", placeholder="Enter location URL [google maps link]") }}
+            {{ form.location_url(class="form-control", placeholder="Enter location URL [google maps link]") }}
         </div>
 
         {{ form.submit(class="btn btn-primary btn-block") }}

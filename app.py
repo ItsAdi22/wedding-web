@@ -1,7 +1,8 @@
 from flask import Flask, render_template,redirect ,url_for, request, flash, session
 from flask_mysqldb import MySQL
-from forms import SignupForm,LoginForm,WeddingDetailsForm
+from forms import SignupForm,LoginForm,WeddingDetailsForm,ReservationForm
 import os
+import random
 
 app = Flask(__name__)
 mysql = MySQL(app)
@@ -13,11 +14,16 @@ app.config["MYSQL_DB"] = os.getenv('MYSQL_DB')
 app.config["MYSQL_USER"] = os.getenv('MYSQL_USER')
 app.config["MYSQL_PASSWORD"] = os.getenv('MYSQL_PASSWORD')
 
+#generate wedding id
+def generate_random_code():
+    return str(random.randint(10000, 99999))
+
+
 @app.route('/tables')
 def createtables():
     try:
         cursor = mysql.connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS users ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL );")
+        cursor.execute("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTO_INCREMENT, wedding_id INTEGER, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL );")
         cursor.execute("CREATE TABLE IF NOT EXISTS wedding_details ( id INT AUTO_INCREMENT PRIMARY KEY, theme VARCHAR(255) NOT NULL, grooms_name VARCHAR(255) NOT NULL, brides_name VARCHAR(255) NOT NULL, wedding_date DATE NOT NULL, wedding_location TEXT NOT NULL, city_name VARCHAR(255) NOT NULL, location_url VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL );")
 
     except Exception as e:
@@ -67,8 +73,9 @@ def signup():
                         return redirect(url_for('signup'))
 
                     else:
-                        sql = "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)"
-                        value = (userName, email, password)
+                        sql = "INSERT INTO users (wedding_id, name, email, password) VALUES (%s, %s, %s, %s)"
+                        wedding_id = generate_random_code()
+                        value = (wedding_id, userName, email, password)
                         cursor.execute(sql, value)
                         mysql.connection.commit()
                         cursor.close()
@@ -127,40 +134,50 @@ def logout():
 def create():
     if 'email' in session:
         form = WeddingDetailsForm()
-        if form.validate_on_submit():
-            theme = request.form.get("theme")
-            grooms_name = request.form.get("grooms_name")
-            brides_name = request.form.get("brides_name")
-            wedding_date = request.form.get("wedding_date")
-            wedding_location = request.form.get("wedding_location")
-            city_name = request.form.get("city_name")
-            location_url = request.form.get("location_url")
-
-            try:
-                cursor = mysql.connection.cursor()
-            
-            except Exception as e:
+        email = session['email']
+        
+        try:
+            cursor = mysql.connection.cursor()
+            cursor.execute("SELECT wedding_id FROM users WHERE email = %s", (email,))
+            wedding_id = cursor.fetchone()
+        
+        except Exception as e:
                 flash(f'ERROR OCCURRED: {e}')
                 return redirect(url_for('home'))
-            
-            else:
-                email = session['email']
-                cursor.execute("SELECT * FROM wedding_details WHERE email = %s", (email,))
-                existing_record = cursor.fetchone()
-                
-                if existing_record:
-                    cursor.execute("UPDATE wedding_details SET theme = %s, grooms_name = %s, brides_name = %s, wedding_date = %s, wedding_location = %s, city_name = %s, location_url = %s WHERE email = %s", (theme,grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url, email))
-                    mysql.connection.commit()
-
-                else:
-                    cursor.execute("INSERT INTO wedding_details (theme, grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url, email) VALUES (%s,%s, %s, %s, %s, %s, %s, %s)", (theme,grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url, email))
-                    mysql.connection.commit()
-                
-                cursor.close()
-                flash("Data Updated!")
-            return redirect(url_for('create'))
         else:
-            return render_template('dashboard.html',form=form)
+            if form.validate_on_submit():
+                theme = request.form.get("theme")
+                grooms_name = request.form.get("grooms_name")
+                brides_name = request.form.get("brides_name")
+                wedding_date = request.form.get("wedding_date")
+                wedding_location = request.form.get("wedding_location")
+                city_name = request.form.get("city_name")
+                location_url = request.form.get("location_url")
+        
+                try:
+                    pass
+
+                except Exception as e:
+                    flash(f'ERROR OCCURRED: {e}')
+                    return redirect(url_for('home'))
+                
+                else:
+                    cursor.execute("SELECT * FROM wedding_details WHERE email = %s", (email,))
+                    existing_record = cursor.fetchone()
+                
+                    if existing_record:
+                        cursor.execute("UPDATE wedding_details SET theme = %s, grooms_name = %s, brides_name = %s, wedding_date = %s, wedding_location = %s, city_name = %s, location_url = %s WHERE email = %s", (theme,grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url, email))
+                        mysql.connection.commit()
+
+                    else:
+                        cursor.execute("INSERT INTO wedding_details (theme, grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url, email) VALUES (%s,%s, %s, %s, %s, %s, %s, %s)", (theme,grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url, email))
+                        mysql.connection.commit()
+                
+                    cursor.close()
+                    flash("Data Updated!")
+                    return redirect(url_for('create'))
+            else:
+                return render_template('dashboard.html',form=form,wedding_id=wedding_id)  
     else:
         return redirect(url_for('login'))
     
@@ -172,6 +189,7 @@ def userpage(userinput):
             return redirect(url_for('home'))
         
         else:
+            form = ReservationForm()
             try:
                 cursor = mysql.connection.cursor()
                 sql = "SELECT email FROM users WHERE id = %s;"
@@ -183,7 +201,7 @@ def userpage(userinput):
             
             else:
                 useridfound = cursor.fetchone()
-                
+
                 if useridfound:
                     sql = "SELECT theme, grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url FROM wedding_details WHERE email = %s"
                     value = (useridfound)
@@ -203,11 +221,22 @@ def userpage(userinput):
                         return redirect(url_for('home'))
                     
                     else:
-                        return render_template(f'{theme}/index.html',grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url)
+                        return render_template(f'{theme}/index.html',grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url,form=form)
                 else:
                     print("user not found")
                     return redirect(url_for('home'))
 
+@app.route('/reservation',methods=['POST'])
+def reservation():
+    form = ReservationForm()
+    
+    if form.validate_on_submit():
+        name = request.form.get("name")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
+        will_attend_yes = request.form.get("will_attend_yes")
+        will_attend_no = request.form.get("will_attend_no")
+        note = request.form.get("note")
 
 
 @app.route('/create/view1')

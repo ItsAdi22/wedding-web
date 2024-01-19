@@ -245,32 +245,44 @@
         <div class="row">
           <div class="col-md-6 col-md-offset-3">
             <div class="probootstrap-card probootstrap-animate">
-              <form class="probootstrap-form">
+              <form class="probootstrap-form" method="POST" action="{{ reservation }}">
+                {{ form.csrf_token }}
+                
                 <div class="form-group">
-                  <label for="name">Your Name</label>
-                  <input type="text" class="form-control" id="name">
+                    <label for="{{ form.wedding_id.id }}">Wedding ID</label>
+                    {{ form.wedding_id(class="form-control" ,placeholder="Ask wedding organiser for id") }}
                 </div>
+            
                 <div class="form-group">
-                  <label for="email">Your Email</label>
-                  <input type="text" class="form-control" id="email">
+                    <label for="{{ form.name.id }}">Your Name</label>
+                    {{ form.name(class="form-control") }}
                 </div>
+            
                 <div class="form-group">
-                  <label for="phone">Your Phone No.</label>
-                  <input type="number" class="form-control" id="phone">
+                    <label for="{{ form.email.id }}">Your Email</label>
+                    {{ form.email(class="form-control") }}
                 </div>
+            
                 <div class="form-group">
-                  <p>Will you attend?</p>
-                  <label for="yes"><input type="checkbox" id="yes"> Yes, I will be there</label> <br>
-                  <label for="no"><input type="checkbox" id="no"> Sorry, I can't come</label> <br>
+                    <label for="{{ form.phone.id }}">Your Phone No.</label>
+                    {{ form.phone(class="form-control") }}
                 </div>
+            
                 <div class="form-group">
-                  <label for="note">Note</label>
-                  <textarea name="" id="note" cols="20" rows="5" class="form-control"></textarea>
+                    <p>Will you attend?</p>
+                    <label for="{{ form.will_attend_yes.id }}">{{ form.will_attend_yes }} Yes, I will be there</label> <br>
+                    <label for="{{ form.will_attend_no.id }}">{{ form.will_attend_no }} Sorry, I can't come</label> <br>
                 </div>
+            
                 <div class="form-group">
-                  <input type="submit" class="btn btn-primary btn-lg" value="Send RSVP">
+                    <label for="{{ form.note.id }}">Note</label>
+                    {{ form.note(class="form-control") }}
                 </div>
-              </form>
+            
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-primary btn-lg") }}
+                </div>
+            </form>
             </div>
           </div>
         </div>
