@@ -25,7 +25,8 @@ def createtables():
         cursor = mysql.connection.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTO_INCREMENT, wedding_id INTEGER, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL );")
         cursor.execute("CREATE TABLE IF NOT EXISTS wedding_details ( id INT AUTO_INCREMENT PRIMARY KEY, theme VARCHAR(255) NOT NULL, grooms_name VARCHAR(255) NOT NULL, brides_name VARCHAR(255) NOT NULL, wedding_date DATE NOT NULL, wedding_location TEXT NOT NULL, city_name VARCHAR(255) NOT NULL, location_url VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL );")
-
+        cursor.execute("CREATE TABLE IF NOT EXISTS reservation ( id INT AUTO_INCREMENT PRIMARY KEY, wedding_id INT, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, will_attend_yes BOOLEAN, will_attend_no BOOLEAN, note TEXT );")
+    
     except Exception as e:
         print(f"ERROR OCCURRED: {e}")
         flash(f"ERROR OCCURRED: {e}")
@@ -155,16 +156,15 @@ def create():
                 location_url = request.form.get("location_url")
         
                 try:
-                    pass
+                    cursor.execute("SELECT * FROM wedding_details WHERE email = %s", (email,))
+                    existing_record = cursor.fetchone()
 
                 except Exception as e:
                     flash(f'ERROR OCCURRED: {e}')
                     return redirect(url_for('home'))
                 
                 else:
-                    cursor.execute("SELECT * FROM wedding_details WHERE email = %s", (email,))
-                    existing_record = cursor.fetchone()
-                
+
                     if existing_record:
                         cursor.execute("UPDATE wedding_details SET theme = %s, grooms_name = %s, brides_name = %s, wedding_date = %s, wedding_location = %s, city_name = %s, location_url = %s WHERE email = %s", (theme,grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url, email))
                         mysql.connection.commit()
@@ -182,8 +182,8 @@ def create():
         return redirect(url_for('login'))
     
 
-@app.route("/<userinput>")
-@app.route("/page/<userinput>")
+@app.route("/<userinput>",methods=['GET','POST'])
+@app.route("/page/<userinput>",methods=['GET','POST'])
 def userpage(userinput):
         if not userinput.isdigit():
             return redirect(url_for('home'))
@@ -226,11 +226,12 @@ def userpage(userinput):
                     print("user not found")
                     return redirect(url_for('home'))
 
-@app.route('/reservation',methods=['POST'])
+@app.route('/reservation', methods=['POST'])
 def reservation():
     form = ReservationForm()
-    
+
     if form.validate_on_submit():
+        wedding_id = request.form.get("wedding_id")
         name = request.form.get("name")
         email = request.form.get("email")
         phone = request.form.get("phone")
@@ -238,6 +239,25 @@ def reservation():
         will_attend_no = request.form.get("will_attend_no")
         note = request.form.get("note")
 
+        try:
+            cursor = mysql.connection.cursor()
+            cursor.execute("INSERT INTO reservation (wedding_id, name, email, phone, will_attend_yes, will_attend_no, note) VALUES (%s, %s, %s, %s, %s, %s, %s);", (wedding_id, name, email, phone, will_attend_yes, will_attend_no, note))
+            mysql.connection.commit()
+            flash("Data Submitted :)")
+            return redirect('home')
+
+        except Exception as e:
+            flash(f'ERROR OCCURRED: {e}')
+            print(f'ERROR OCCURRED: {e}')
+            return redirect(url_for('home'))
+
+        finally:
+            cursor.close()
+
+    else:
+        flash("Alert: Form not validated")
+        print("Alert: Form not validated")
+        return redirect(url_for('home'))
 
 @app.route('/create/view1')
 def view():
