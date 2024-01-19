@@ -1,7 +1,6 @@
-from flask import Flask, render_template,redirect ,url_for, request, flash
+from flask import Flask, render_template,redirect ,url_for, request, flash, session
 from flask_mysqldb import MySQL
 from forms import SignupForm,LoginForm
-from dotenv import load_dotenv
 import os
 
 app = Flask(__name__)
@@ -59,7 +58,7 @@ def signup():
                 mysql.connection.commit()
                 cursor.close()
                 flash("User Registration Successful!")
-                return redirect(url_for('signup'))
+                return redirect(url_for('login'))
 
     else:
         return render_template('login/signup.html', form=SignupForm())
@@ -72,7 +71,24 @@ def login():
 
         email = request.form.get("email")
         password = request.form.get("password")
-        return "Login Successful"
+        
+        try:
+            cursor = mysql.connection.cursor()
+        
+        except Exception as e:
+            flash(f"ERROR OCCURRED: {e}")
+            return redirect(url_for('home')) 
+        
+        else:
+            cursor.execute('SELECT * FROM users WHERE email = %s AND password IS NOT NULL AND password = %s', (email, password,))
+            account = cursor.fetchone()
+            if account:
+                session['email'] = email
+                flash("Login Successful")
+                return redirect(url_for('home'))
+            else:
+                flash('Incorrect Email / Password')
+                return redirect(url_for('login'))
     
     else:
         return render_template('login/login.html',form=LoginForm())
