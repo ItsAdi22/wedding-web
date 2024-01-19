@@ -1,0 +1,51 @@
+{% extends 'header.html' %}
+
+{% block detailscss %}
+<style>
+    body {
+            padding-top: 56px; /* Adjusted for the fixed navbar height */
+        }
+    .form-container {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+</style>
+
+{% endblock detailscss %}
+
+{% block details %}
+<div class="container mt-5 form-container">
+    <form method="POST" action="{{ url_for('create') }}">
+        {{ form.csrf_token }}
+
+        <h2 class="text-center mb-4">Wedding Details</h2>
+
+        <div class="form-group">
+            {{ form.grooms_name.label(class="form-label") }}
+            {{ form.grooms_name(class="form-control", placeholder="Enter groom's name") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.brides_name.label(class="form-label") }}
+            {{ form.brides_name(class="form-control", placeholder="Enter bride's name") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.wedding_date.label(class="form-label") }}
+            {{ form.wedding_date(class="form-control datepicker", placeholder="Select wedding date") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.wedding_location.label(class="form-label") }}
+            {{ form.wedding_location(class="form-control", rows="3", placeholder="Enter wedding location") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.city_name.label(class="form-label") }}
+            {{ form.city_name(class="form-control", placeholder="Enter city name") }}
+        </div>
+
+        {{ form.submit(class="btn btn-primary btn-block") }}
+    </form>
+</div>
+{% endblock details %}

@@ -1,6 +1,6 @@
 from flask import Flask, render_template,redirect ,url_for, request, flash, session
 from flask_mysqldb import MySQL
-from forms import SignupForm,LoginForm
+from forms import SignupForm,LoginForm,WeddingDetailsForm
 import os
 
 app = Flask(__name__)
@@ -118,10 +118,28 @@ def logout():
     return redirect(url_for('home'))
 
 ###################################### ROUTES FOR LOGIN/SIGNUP END ######################################
+@app.route('/create',methods=['POST','GET'])
+def create():
+    if 'email' in session:
+        form = WeddingDetailsForm()
+        if form.validate_on_submit():
+            # Process the form data as needed
+            grooms_name = request.form.get("grooms_name")
+            brides_name = request.form.get("brides_name")
+            wedding_date = request.form.get("wedding_date")
+            wedding_location = request.form.get("wedding_location")
+            city_name = request.form.get("city_name")
 
+            flash(f'{grooms_name}-{brides_name}-{wedding_date}-{wedding_location}-{city_name}')
+            print(f'{grooms_name}-{brides_name}-{wedding_date}-{wedding_location}-{city_name}')
+            return redirect(request.referrer)
+        
+        return render_template('dashboard.html',form=form)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/create/view1')
-def create():
+def view():
     return render_template('wedding/index.html')
 app.run(port=80,debug=True)
 
