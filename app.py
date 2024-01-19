@@ -13,7 +13,7 @@ app.config["MYSQL_DB"] = os.getenv('MYSQL_DB')
 app.config["MYSQL_USER"] = os.getenv('MYSQL_USER')
 app.config["MYSQL_PASSWORD"] = os.getenv('MYSQL_PASSWORD')
 
-
+@app.route('/tables')
 def createtables():
     try:
         cursor = mysql.connection.cursor()
@@ -21,16 +21,18 @@ def createtables():
 
     except Exception as e:
         print(f"ERROR OCCURRED: {e}")
+        flash(f"ERROR OCCURRED: {e}")
         return redirect(url_for('home'))
     
 @app.route('/')
 def home():
-    return render_template('home.html')
+    if 'email' in session:
+        return render_template('home.html')
+    else:
+        return render_template('home.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    createtables()  # Ensure the table exists
-
     form = SignupForm()
     if form.validate_on_submit():
         userName = request.form.get("userName")
@@ -71,13 +73,13 @@ def signup():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        cursor = mysql.connection.cursor()
 
         email = request.form.get("email")
         password = request.form.get("password")
         
         try:
             cursor = mysql.connection.cursor()
+            
         
         except Exception as e:
             flash(f"ERROR OCCURRED: {e}")
@@ -96,6 +98,12 @@ def login():
     
     else:
         return render_template('login/login.html',form=LoginForm())
+    
+@app.route('/logout')
+def logout():
+    session.pop('email',None)
+    flash("Logged Out")
+    return redirect(url_for('home'))
 
 app.run(port=80,debug=True)
 

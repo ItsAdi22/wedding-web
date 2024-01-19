@@ -34,12 +34,14 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{url_for('home')}}">Home <span class="sr-only">(current)</span></a>
                 </li>
+                {% if not 'email' in session %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('signup')}}">Signup</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('login')}}">Login</a>
                 </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
