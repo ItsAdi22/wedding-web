@@ -31,7 +31,9 @@ def home():
     else:
         return render_template('home.html')
 
+###################################### ROUTES FOR LOGIN/SIGNUP START ######################################
 @app.route('/signup', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def signup():
     form = SignupForm()
     if 'email' in session:
@@ -74,6 +76,7 @@ def signup():
             return render_template('login/signup.html', form=SignupForm())
 
 @app.route('/login',methods=['POST','GET'])
+@app.route('/signin',methods=['POST','GET'])
 def login():
     form = LoginForm()
     if 'email' in session:
@@ -100,6 +103,7 @@ def login():
                     session['email'] = email
                     flash("Login Successful")
                     return redirect(url_for('home'))
+                
                 else:
                     flash('Incorrect Email / Password')
                     return redirect(url_for('login'))
@@ -113,5 +117,11 @@ def logout():
     flash("Logged Out")
     return redirect(url_for('home'))
 
+###################################### ROUTES FOR LOGIN/SIGNUP END ######################################
+
+
+@app.route('/create/view1')
+def create():
+    return render_template('wedding/index.html')
 app.run(port=80,debug=True)
 
