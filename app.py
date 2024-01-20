@@ -4,6 +4,9 @@ from forms import SignupForm,LoginForm,WeddingDetailsForm,ReservationForm,Couple
 from dotenv import load_dotenv
 import os
 import random
+import datetime
+from pytz import timezone 
+
 load_dotenv()
 app = Flask(__name__)
 mysql = MySQL(app)
@@ -19,6 +22,8 @@ app.config["MYSQL_PASSWORD"] = os.getenv('MYSQL_PASSWORD')
 #generate wedding id
 def generate_random_code():
     return str(random.randint(10000, 99999))
+
+
 
 
 @app.route('/tables')
@@ -224,12 +229,45 @@ def userpage(userinput):
                         city_name = data[5] 
                         location_url = data[6]
                     
+                        #calculate date
+                        
+                        print(f'WEDDING DATE -----<>---> {wedding_date}')
+                        # Parse the date string into a datetime object
+                        # Check if wedding_date is already a datetime.date object
+                        if isinstance(wedding_date, datetime.date):
+                            given_date = wedding_date  # No need to parse, use it directly
+                        else:
+                            # Parse the date string into a datetime object
+                            try:
+                                given_date = datetime.datetime.strptime(wedding_date, "%Y-%m-%d").date()
+                            except ValueError:
+                                print("Invalid date format. Please use YYYY-MM-DD format.")
+                                # Handle the error as needed
+
+                        # Proceed with the calculations if parsing was successful
+                        if given_date:
+                            # Specify the target time zone (replace with the appropriate one)
+                            target_timezone = timezone("Asia/Kolkata")  # Example: Asia/Kolkata
+
+                            # Convert both dates to the target time zone
+                            given_date_tz = datetime.datetime.combine(given_date, datetime.time.min).astimezone(target_timezone)
+                            current_date_tz = datetime.datetime.now(target_timezone)
+
+                            difference =  given_date_tz- current_date_tz
+
+                            # Calculate remaining time components
+                            total_seconds = difference.total_seconds()
+                            remaining_days = int(total_seconds // (24 * 60 * 60))
+                            remaining_hours = int((total_seconds % (24 * 60 * 60)) // 3600)
+                            remaining_minutes = int((total_seconds % 3600) // 60)
+                            remaining_seconds = int(total_seconds % 60)
+                        
                     except Exception as e:
                         print(f'SOME OR ALL DATA IS MISSING: {e}')
                         return redirect(url_for('home'))
                     
                     else:
-                        return render_template(f'{theme}/index.html',grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url,form=form)
+                        return render_template(f'{theme}/index.html',grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url,form=form,days=remaining_days,hours=remaining_hours,minutes=remaining_minutes,seconds=remaining_seconds)
                 else:
                     print("user not found")
                     return redirect(url_for('home'))
