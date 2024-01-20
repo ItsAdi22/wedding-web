@@ -21,6 +21,8 @@
 
 {% block details %}
 <h6>YOUR WEDDING ID: {{wedding_id[0]}}</h6>
+<h6>YOUR WEBSITE URL: http://{{domain}}/{{userid}}</h6>
+
 <div class="container mt-5 form-container">
     <form method="POST" action="{{ url_for('create') }}" class="form">
         {{ form.csrf_token }}

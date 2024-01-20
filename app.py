@@ -9,6 +9,7 @@ app = Flask(__name__)
 mysql = MySQL(app)
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['DOMAIN'] = os.getenv('DOMAIN')
 
 app.config["MYSQL_HOST"] = os.getenv('MYSQL_HOST')
 app.config["MYSQL_DB"] = os.getenv('MYSQL_DB')
@@ -138,9 +139,14 @@ def create():
         form = WeddingDetailsForm()
         form2 = CoupleImageForm()
         email = session['email']
+        domain = app.config['DOMAIN']
         
         try:
             cursor = mysql.connection.cursor()
+            
+            cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
+            userid = cursor.fetchone()
+            
             cursor.execute("SELECT wedding_id FROM users WHERE email = %s", (email,))
             wedding_id = cursor.fetchone()
         
@@ -179,7 +185,7 @@ def create():
                     flash("Data Updated!")
                     return redirect(url_for('create'))
             else:
-                return render_template('dashboard.html',form=form,wedding_id=wedding_id,form2=form2)  
+                return render_template('dashboard.html',form=form,wedding_id=wedding_id,form2=form2,userid=userid[0],domain=domain)  
     else:
         return redirect(url_for('login'))
     
@@ -285,5 +291,5 @@ def entries():
         return render_template('entries.html',attendies=attendies)
 
 if __name__ == '__main__':
-    app.run(port=80,debug=True)
+    app.run(host=os.getenv('DOMAIN'),port=80,debug=True)
 
