@@ -270,8 +270,8 @@
             
                 <div class="form-group">
                     <p>Will you attend?</p>
-                    <label for="{{ form.will_attend_yes.id }}">{{ form.will_attend_yes }} Yes, I will be there</label> <br>
-                    <label for="{{ form.will_attend_no.id }}">{{ form.will_attend_no }} Sorry, I can't come</label> <br>
+                    <label for="{{ form.will_attend_yes.id }}">
+                      {{ form.will_attend_yes(value="1") }} Yes, I will be there </label> <br>
                 </div>
             
                 <div class="form-group">

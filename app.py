@@ -1,9 +1,10 @@
 from flask import Flask, render_template,redirect ,url_for, request, flash, session
 from flask_mysqldb import MySQL
 from forms import SignupForm,LoginForm,WeddingDetailsForm,ReservationForm
+from dotenv import load_dotenv
 import os
 import random
-
+load_dotenv()
 app = Flask(__name__)
 mysql = MySQL(app)
 
@@ -25,7 +26,7 @@ def createtables():
         cursor = mysql.connection.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTO_INCREMENT, wedding_id INTEGER, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL );")
         cursor.execute("CREATE TABLE IF NOT EXISTS wedding_details ( id INT AUTO_INCREMENT PRIMARY KEY, theme VARCHAR(255) NOT NULL, grooms_name VARCHAR(255) NOT NULL, brides_name VARCHAR(255) NOT NULL, wedding_date DATE NOT NULL, wedding_location TEXT NOT NULL, city_name VARCHAR(255) NOT NULL, location_url VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL );")
-        cursor.execute("CREATE TABLE IF NOT EXISTS reservation ( id INT AUTO_INCREMENT PRIMARY KEY, wedding_id INT, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, will_attend_yes BOOLEAN, will_attend_no BOOLEAN, note TEXT );")
+        cursor.execute("CREATE TABLE IF NOT EXISTS reservation ( id INT AUTO_INCREMENT PRIMARY KEY, wedding_id INT, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, will_attend_yes BOOLEAN, note TEXT );")
     
     except Exception as e:
         print(f"ERROR OCCURRED: {e}")
@@ -86,7 +87,7 @@ def signup():
                 flash("Password and confirmpassword fields should match!")
                 return redirect(url_for('signup'))
         else:
-            return render_template('login/signup.html', form=SignupForm())
+            return render_template('login/signup.html', form=form)
 
 @app.route('/login',methods=['POST','GET'])
 @app.route('/signin',methods=['POST','GET'])
@@ -236,7 +237,6 @@ def reservation():
         email = request.form.get("email")
         phone = request.form.get("phone")
         will_attend_yes = request.form.get("will_attend_yes")
-        will_attend_no = request.form.get("will_attend_no")
         note = request.form.get("note")
 
         try:
@@ -249,7 +249,7 @@ def reservation():
             
         
         else:
-            cursor.execute("INSERT INTO reservation (wedding_id, name, email, phone, will_attend_yes, will_attend_no, note) VALUES (%s, %s, %s, %s, %s, %s, %s);", (wedding_id, name, email, phone, will_attend_yes, will_attend_no, note))
+            cursor.execute("INSERT INTO reservation (wedding_id, name, email, phone, will_attend_yes, note) VALUES (%s, %s, %s, %s, %s, %s);", (wedding_id, name, email, phone, will_attend_yes, note))
             mysql.connection.commit()
             cursor.close()  
             flash("Data Submitted :)")

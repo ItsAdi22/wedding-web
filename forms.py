@@ -8,7 +8,7 @@ class SignupForm(FlaskForm):
     userName = StringField('Username', validators=[DataRequired(), Length(min=4, max=20)])
     email = EmailField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
-    confpassword = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
+    confpassword = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=6)])
     submit = SubmitField('Sign Up')
 
 class LoginForm(FlaskForm):
@@ -31,7 +31,6 @@ class ReservationForm(FlaskForm):
     name = StringField('Your Name', validators=[DataRequired(), Length(max=255)])
     email = EmailField('Your Email', validators=[DataRequired(), Email(), Length(max=255)])
     phone = IntegerField('Your Phone No.', validators=[DataRequired(), Length(max=10)])  # Assuming phone number is a string
-    will_attend_yes = BooleanField('Yes, I will be there')
-    will_attend_no = BooleanField("Sorry, I can't come")
+    will_attend_yes = BooleanField('Yes, I will be there', default=True)
     note = TextAreaField('Note', validators=[Length(max=500)])  # Adjust the max length as needed
     submit = SubmitField('Send RSVP')
