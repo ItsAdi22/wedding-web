@@ -3,24 +3,29 @@
 {% block detailscss %}
 <style>
     body {
-            padding-top: 56px; /* Adjusted for the fixed navbar height */
-        }
+        padding-top: 56px; /* Adjusted for the fixed navbar height */
+    }
+
     .form-container {
-        max-width: 400px;
+        display: flex;
+        justify-content: space-between;
+        max-width: 800px; /* Adjust as needed */
         margin: 0 auto;
     }
-</style>
 
+    .form {
+        width: 48%; /* Adjust as needed */
+    }
+</style>
 {% endblock detailscss %}
 
 {% block details %}
+<h6>YOUR WEDDING ID: {{wedding_id[0]}}</h6>
 <div class="container mt-5 form-container">
-    
-    <form method="POST" action="{{ url_for('create') }}">
+    <form method="POST" action="{{ url_for('create') }}" class="form">
         {{ form.csrf_token }}
 
         <h2 class="text-center mb-4">Wedding Details</h2>
-        <h6>YOUR WEDDING ID: {{wedding_id[0]}}</h6>
 
         <div class="form-group">
             {{ form.theme.label(class="form-label") }}
@@ -58,6 +63,23 @@
         </div>
 
         {{ form.submit(class="btn btn-primary btn-block") }}
+    </form>
+
+    <form method="POST" action="" enctype="multipart/form-data" class="form">
+        {{ form2.hidden_tag() }}
+        <h2 class="text-center mb-4">Image Upload</h2>
+
+        <div class="form-group">
+            <label for="{{ form2.groom_image.id }}">Groom's Image</label>
+            {{ form2.groom_image(class="form-control", accept=".jpg, .jpeg, .png", required="required") }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form2.bride_image.id }}">Bride's Image</label>
+            {{ form2.bride_image(class="form-control", accept=".jpg, .jpeg, .png", required="required") }}
+        </div>
+
+        {{ form2.submit(class="btn btn-primary btn-block") }}
     </form>
 </div>
 {% endblock details %}

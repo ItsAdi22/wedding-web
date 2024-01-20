@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField,TextAreaField, DateField, URLField, SelectField, RadioField, IntegerField, EmailField
+from wtforms import StringField, PasswordField, SubmitField,TextAreaField, DateField, URLField, SelectField, RadioField, IntegerField, EmailField, FileField
 from wtforms.validators import DataRequired, Email, Length
+from flask_wtf.file import FileRequired
 
 
 
@@ -34,3 +35,8 @@ class ReservationForm(FlaskForm):
     will_attend = RadioField('Will you attend?', choices=[('1', 'Yes, I will be there'), ('0', "Sorry, can't come")], default='1')
     note = TextAreaField('Note', validators=[Length(max=500)])  # Adjust the max length as needed
     submit = SubmitField('Send RSVP')
+
+class CoupleImageForm(FlaskForm):
+    groom_image = FileField('Groom\'s Image', validators=[FileRequired()])
+    bride_image = FileField('Bride\'s Image', validators=[FileRequired()])
+    submit = SubmitField('Upload')

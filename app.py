@@ -1,6 +1,6 @@
 from flask import Flask, render_template,redirect ,url_for, request, flash, session
 from flask_mysqldb import MySQL
-from forms import SignupForm,LoginForm,WeddingDetailsForm,ReservationForm
+from forms import SignupForm,LoginForm,WeddingDetailsForm,ReservationForm,CoupleImageForm
 from dotenv import load_dotenv
 import os
 import random
@@ -136,6 +136,7 @@ def logout():
 def create():
     if 'email' in session:
         form = WeddingDetailsForm()
+        form2 = CoupleImageForm()
         email = session['email']
         
         try:
@@ -178,7 +179,7 @@ def create():
                     flash("Data Updated!")
                     return redirect(url_for('create'))
             else:
-                return render_template('dashboard.html',form=form,wedding_id=wedding_id)  
+                return render_template('dashboard.html',form=form,wedding_id=wedding_id,form2=form2)  
     else:
         return redirect(url_for('login'))
     
