@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField,TextAreaField, DateField, URLField, SelectField, BooleanField, IntegerField, EmailField
+from wtforms import StringField, PasswordField, SubmitField,TextAreaField, DateField, URLField, SelectField, RadioField, IntegerField, EmailField
 from wtforms.validators import DataRequired, Email, Length
 
 
@@ -31,6 +31,6 @@ class ReservationForm(FlaskForm):
     name = StringField('Your Name', validators=[DataRequired(), Length(max=255)])
     email = EmailField('Your Email', validators=[DataRequired(), Email(), Length(max=255)])
     phone = IntegerField('Your Phone No.', validators=[DataRequired(), Length(max=10)])  # Assuming phone number is a string
-    will_attend_yes = BooleanField('Yes, I will be there', default=True)
+    will_attend = RadioField('Will you attend?', choices=[('1', 'Yes, I will be there'), ('0', "Sorry, can't come")], default='1')
     note = TextAreaField('Note', validators=[Length(max=500)])  # Adjust the max length as needed
     submit = SubmitField('Send RSVP')

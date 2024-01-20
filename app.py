@@ -26,7 +26,7 @@ def createtables():
         cursor = mysql.connection.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTO_INCREMENT, wedding_id INTEGER, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL );")
         cursor.execute("CREATE TABLE IF NOT EXISTS wedding_details ( id INT AUTO_INCREMENT PRIMARY KEY, theme VARCHAR(255) NOT NULL, grooms_name VARCHAR(255) NOT NULL, brides_name VARCHAR(255) NOT NULL, wedding_date DATE NOT NULL, wedding_location TEXT NOT NULL, city_name VARCHAR(255) NOT NULL, location_url VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL );")
-        cursor.execute("CREATE TABLE IF NOT EXISTS reservation ( id INT AUTO_INCREMENT PRIMARY KEY, wedding_id INT, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, will_attend_yes BOOLEAN, note TEXT );")
+        cursor.execute("CREATE TABLE IF NOT EXISTS reservation ( id INT AUTO_INCREMENT PRIMARY KEY, wedding_id INT, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, will_attend BOOLEAN, note TEXT );")
     
     except Exception as e:
         print(f"ERROR OCCURRED: {e}")
@@ -236,7 +236,7 @@ def reservation():
         name = request.form.get("name")
         email = request.form.get("email")
         phone = request.form.get("phone")
-        will_attend_yes = request.form.get("will_attend_yes")
+        will_attend = request.form.get("will_attend")
         note = request.form.get("note")
 
         try:
@@ -249,7 +249,7 @@ def reservation():
             
         
         else:
-            cursor.execute("INSERT INTO reservation (wedding_id, name, email, phone, will_attend_yes, note) VALUES (%s, %s, %s, %s, %s, %s);", (wedding_id, name, email, phone, will_attend_yes, note))
+            cursor.execute("INSERT INTO reservation (wedding_id, name, email, phone, will_attend, note) VALUES (%s, %s, %s, %s, %s, %s);", (wedding_id, name, email, phone, will_attend, note))
             mysql.connection.commit()
             cursor.close()  
             flash("Data Submitted :)")
@@ -260,9 +260,28 @@ def reservation():
         print("Alert: Form not validated")
         return redirect(url_for('home'))
 
-@app.route('/create/view1')
-def view():
-    return render_template('template1/index.html')
+@app.route('/entries')
+def entries():
+    if 'email' in session:
+        email = session['email']
+        try:
+            cursor = mysql.connection.cursor()
+        
+        except Exception as e:
+            flash(f'ERROR OCCURRED: {e}')
+            return redirect(url_for('home'))
+        else:
+            sql = "SELECT wedding_id FROM users WHERE email = %s;"
+            value = (email,)
+            cursor.execute(sql,value)
+            wedding_id = cursor.fetchone()
+
+            sql = "SELECT name, email, phone, will_attend, note FROM reservation WHERE wedding_id = %s;"
+            value=(wedding_id,)
+            cursor.execute(sql,value)
+            attendies = cursor.fetchall()
+            print(attendies)
+        return render_template('entries.html',attendies=attendies)
 
 if __name__ == '__main__':
     app.run(port=80,debug=True)
