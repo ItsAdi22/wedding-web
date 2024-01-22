@@ -22,22 +22,22 @@
         <div class="form-group">
             <label for="{{ form.userName.id }}">Name</label>
             {{ form.userName(class="form-control", placeholder="Enter your name", required="required") }}
-        </div>
+        </div> <br>
 
         <div class="form-group">
             <label for="{{ form.email.id }}">Email</label>
             {{ form.email(class="form-control", placeholder="Enter your email", required="required") }}
-        </div>
+        </div> <br>
 
         <div class="form-group">
             <label for="{{ form.password.id }}">Password</label>
             {{ form.password(class="form-control", placeholder="Enter your password", required="required") }}
-        </div>
+        </div> <br>
 
         <div class="form-group">
             <label for="{{ form.confpassword.id }}">Confirm Password</label>
             {{ form.confpassword(class="form-control", placeholder="Confirm your password", required="required") }}
-        </div>
+        </div> <br>
 
         {{ form.submit(class="btn btn-primary btn-block") }}
     </form>

@@ -95,8 +95,9 @@ def signup():
         else:
             return render_template('login/signup.html', form=form)
 
-@app.route('/login',methods=['POST','GET'])
+
 @app.route('/signin',methods=['POST','GET'])
+@app.route('/login',methods=['POST','GET'])
 def login():
     form = LoginForm()
     if 'email' in session:
