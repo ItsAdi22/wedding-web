@@ -62,26 +62,23 @@
         <div class="form-group">
             {{ form.location_url.label(class="form-label") }}
             {{ form.location_url(class="form-control", placeholder="Enter location URL [google maps link]") }}
-        </div>
+        </div>  <br>
 
         {{ form.submit(class="btn btn-primary btn-block") }}
     </form>
 
-    <form method="POST" action="" enctype="multipart/form-data" class="form">
+    <form method="POST" action="/upload" enctype="multipart/form-data" class="form">
         {{ form2.hidden_tag() }}
-        <h2 class="text-center mb-4">Image Upload</h2>
-
-        <div class="form-group">
-            <label for="{{ form2.groom_image.id }}">Groom's Image</label>
-            {{ form2.groom_image(class="form-control", accept=".jpg, .jpeg, .png", required="required") }}
+        <h2 class="text-center mb-4">Wedding Details</h2>
+        <div class="mb-3">
+            {{ form2.groom.label(class="form-label") }}
+            {{ form2.groom(class="form-control", accept="image/*", required=true) }}
         </div>
-
-        <div class="form-group">
-            <label for="{{ form2.bride_image.id }}">Bride's Image</label>
-            {{ form2.bride_image(class="form-control", accept=".jpg, .jpeg, .png", required="required") }}
+        <div class="mb-3">
+            {{ form2.bride.label(class="form-label") }}
+            {{ form2.bride(class="form-control", accept="image/*", required=true) }}
         </div>
-
-        {{ form2.submit(class="btn btn-primary btn-block") }}
+        {{ form2.submit(class="btn btn-primary") }}
     </form>
 </div>
 {% endblock details %}

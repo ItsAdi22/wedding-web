@@ -37,6 +37,6 @@ class ReservationForm(FlaskForm):
     submit = SubmitField('Send RSVP')
 
 class CoupleImageForm(FlaskForm):
-    groom_image = FileField('Groom\'s Image', validators=[FileRequired()])
-    bride_image = FileField('Bride\'s Image', validators=[FileRequired()])
+    groom = FileField('Groom Image', validators=[DataRequired()])
+    bride = FileField('Bride Image', validators=[DataRequired()])
     submit = SubmitField('Upload')
