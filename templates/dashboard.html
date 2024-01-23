@@ -36,32 +36,58 @@
 
         <div class="form-group">
             {{ form.grooms_name.label(class="form-label") }}
+            {% if grooms_name %}
+            {{ form.grooms_name(class="form-control", placeholder="Enter groom's name", value=grooms_name) }}
+            
+            {% else %}
             {{ form.grooms_name(class="form-control", placeholder="Enter groom's name") }}
+            {% endif %}
         </div>
 
         <div class="form-group">
             {{ form.brides_name.label(class="form-label") }}
+            {% if brides_name %}
+            {{ form.brides_name(class="form-control", placeholder="Enter bride's name", value=brides_name) }}
+            
+            {% else %}
             {{ form.brides_name(class="form-control", placeholder="Enter bride's name") }}
+            {% endif %}
         </div>
 
         <div class="form-group">
             {{ form.wedding_date.label(class="form-label") }}
+            {% if wedding_date %}
+            {{ form.wedding_date(class="form-control datepicker", placeholder="Select wedding date", value=wedding_date) }}
+            {% else %}
             {{ form.wedding_date(class="form-control datepicker", placeholder="Select wedding date") }}
+            {% endif %}
         </div>
 
         <div class="form-group">
             {{ form.wedding_location.label(class="form-label") }}
+            {% if wedding_location %}
+            {{ form.wedding_location(class="form-control", rows="3", placeholder="Enter wedding location", value=wedding_location) }}
+            {% else %}
             {{ form.wedding_location(class="form-control", rows="3", placeholder="Enter wedding location") }}
+            {% endif %}
         </div>
 
         <div class="form-group">
             {{ form.city_name.label(class="form-label") }}
+            {% if city_name %}
+            {{ form.city_name(class="form-control", placeholder="Enter city name", value=city_name) }}
+            {% else %}
             {{ form.city_name(class="form-control", placeholder="Enter city name") }}
+            {% endif %}
         </div>
 
         <div class="form-group">
             {{ form.location_url.label(class="form-label") }}
+            {% if location_url %}
+            {{ form.location_url(class="form-control", placeholder="Enter location URL [google maps link]", value=location_url) }}
+            {% else %}
             {{ form.location_url(class="form-control", placeholder="Enter location URL [google maps link]") }}
+            {% endif %}
         </div>  <br>
 
         {{ form.submit(class="btn btn-primary btn-block") }}

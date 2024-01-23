@@ -190,8 +190,34 @@ def create():
                     cursor.close()
                     flash("Data Updated!")
                     return redirect(url_for('create'))
+            
+            #process groom and bride images
+            elif form2.validate_on_submit():
+
+                pass
             else:
-                return render_template('dashboard.html',form=form,wedding_id=wedding_id,form2=form2,userid=userid[0],domain=domain)  
+                try:
+                    cursor = mysql.connection.cursor()
+                    sql = ('SELECT theme, grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url, email FROM wedding_details WHERE email = %s')
+                    values = (email,)
+                    cursor.execute(sql,values)
+                
+                except Exception as e:
+                    flash(f'ERROR OCCURRED: {e}')
+                    return redirect(url_for('home'))
+                
+                else:
+                    
+                    wedding_details = cursor.fetchone()
+                    theme = wedding_details[0]
+                    grooms_name = wedding_details[1]
+                    brides_name = wedding_details[2]
+                    wedding_date = wedding_details[3]
+                    wedding_location = wedding_details[4]
+                    city_name = wedding_details[5]
+                    location_url = wedding_details[6]
+
+                    return render_template('dashboard.html',form=form,wedding_id=wedding_id,form2=form2,userid=userid[0],domain=domain,grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url)  
     else:
         return redirect(url_for('login'))
     
