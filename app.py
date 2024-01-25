@@ -11,6 +11,9 @@ load_dotenv()
 app = Flask(__name__)
 mysql = MySQL(app)
 
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['DOMAIN'] = os.getenv('DOMAIN')
 
@@ -23,6 +26,21 @@ app.config["MYSQL_PASSWORD"] = os.getenv('MYSQL_PASSWORD')
 def generate_random_code():
     return str(random.randint(10000, 99999))
 
+# Function to store the uploaded images based on wedding_id
+def store_images(wedding_id, groom_image, bride_image):
+    # Create a directory if it doesn't exist
+    upload_dir = os.path.join(app.config['UPLOAD_FOLDER'], str(wedding_id[0]))
+    os.makedirs(upload_dir, exist_ok=True)
+
+    # rename the images
+    groom_filename = f"groom_image.{groom_image.filename.split('.')[-1]}"
+    bride_filename = f"bride_image.{bride_image.filename.split('.')[-1]}"
+    # Save groom image
+    groom_image.save(os.path.join(upload_dir, groom_filename))
+    # Save bride image
+    bride_image.save(os.path.join(upload_dir, bride_filename))
+    
+    flash('Images uploaded successfully')
 
 
 
@@ -193,8 +211,10 @@ def create():
             
             #process groom and bride images
             elif form2.validate_on_submit():
-
-                pass
+                groom_image = form2.groom.data
+                bride_image = form2.bride.data
+                store_images(wedding_id, groom_image, bride_image)
+                return redirect(url_for('create'))
             else:
                 try:
                     cursor = mysql.connection.cursor()

@@ -93,7 +93,7 @@
         {{ form.submit(class="btn btn-primary btn-block") }}
     </form>
 
-    <form method="POST" action="/upload" enctype="multipart/form-data" class="form">
+    <form method="POST" action="{{url_for('create')}}" enctype="multipart/form-data" class="form">
         {{ form2.hidden_tag() }}
         <h2 class="text-center mb-4">Wedding Details</h2>
         <div class="mb-3">
