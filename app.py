@@ -222,11 +222,13 @@ def create():
                 folder_path = os.path.join(app.config['UPLOAD_FOLDER'], str(wedding_id[0]))
                 images = os.listdir(folder_path)
 
-                if (len(images) >2):
-                    try:
-                        os.remove(folder_path)
-                    except PermissionError as e:
-                        flash(f"Please Contact administrator: {e}")
+                if (len(images) > 2):
+                    for x in os.listdir(folder_path):
+                        file_path = os.path.join(folder_path,x)
+                        if os.path.isfile(file_path):
+                            os.remove(file_path)
+                        flash("You cannot upload more than two images!")
+                
                 return redirect(url_for('create'))
             else:
                 try:
@@ -250,7 +252,10 @@ def create():
                     city_name = wedding_details[5]
                     location_url = wedding_details[6]
 
-                    return render_template('dashboard.html',form=form,wedding_id=wedding_id,form2=form2,userid=userid[0],domain=domain,grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url)  
+                    folder_path = os.path.join(app.config['UPLOAD_FOLDER'], str(wedding_id[0]))
+                    images = os.listdir(folder_path)
+                    images_count = len(images)
+                    return render_template('dashboard.html',form=form,wedding_id=wedding_id,form2=form2,userid=userid[0],domain=domain,grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url,images_count=images_count)  
     else:
         return redirect(url_for('login'))
     

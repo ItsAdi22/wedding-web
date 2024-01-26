@@ -94,7 +94,7 @@
             <div class="probootstrap-bride probootstrap-animate">
               <figure>
                 {% if bride_image %}
-                <img src="{{url_for('static', filename='uploads/' + wedding_id + '/' + bride_image)}}" alt="bride_image" class="img-responsive">
+                <img src="{{url_for('static', filename='uploads/' + wedding_id + '/' + bride_image)}}" alt="bride_image" class="img-responsive" width="auto" height="643px">
                 {% elif bride_image == False %}
                 <img src="{{url_for('static', filename='template1/img/bride_1.jpg')}}" alt="change_this_later" class="img-responsive">
                 {% endif %}

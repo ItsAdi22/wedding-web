@@ -104,7 +104,8 @@
             {{ form2.bride.label(class="form-label") }}
             {{ form2.bride(class="form-control", accept="image/*", required=true) }}
         </div>
-        {{ form2.submit(class="btn btn-primary") }}
+        {{ form2.submit(class="btn btn-primary") }} <br>
+        <small>Images uploaded: {{images_count}}</small>
     </form>
 </div>
 {% endblock details %}
