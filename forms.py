@@ -33,6 +33,7 @@ class ReservationForm(FlaskForm):
     email = EmailField('Your Email', validators=[DataRequired(), Email(), Length(max=255)])
     phone = IntegerField('Your Phone No.', validators=[DataRequired(), Length(max=10)])  # Assuming phone number is a string
     will_attend = RadioField('Will you attend?', choices=[('1', 'Yes, I will be there'), ('0', "Sorry, can't come")], default='1')
+    guests = SelectField('No. of Guests', choices=[('1', '1 Guest'), ('2', '2 Guest'), ('3', '3 Guest'), ('4', '4 Guest'),('5', '5 Guest')], validators=[DataRequired()])
     note = TextAreaField('Note', validators=[Length(max=500)])  # Adjust the max length as needed
     submit = SubmitField('Send RSVP')
 

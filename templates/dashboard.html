@@ -21,7 +21,7 @@
 
 {% block details %}
 <h6>YOUR WEDDING ID: {{wedding_id[0]}}</h6>
-<h6>YOUR WEBSITE URL: http://{{domain}}/{{userid}}</h6>
+<h6>YOUR WEBSITE URL: <a href="http://{{domain}}/{{userid}}" target="_blank"> Click Here</a></h6>
 
 <div class="container mt-5 form-container">
     <form method="POST" action="{{ url_for('create') }}" class="form">
@@ -95,7 +95,7 @@
 
     <form method="POST" action="{{url_for('create')}}" enctype="multipart/form-data" class="form">
         {{ form2.hidden_tag() }}
-        <h2 class="text-center mb-4">Wedding Details</h2>
+        <h2 class="text-center mb-4">Image Section</h2>
         <div class="mb-3">
             {{ form2.groom.label(class="form-label") }}
             {{ form2.groom(class="form-control", accept="image/*", required=true) }}

@@ -53,7 +53,7 @@ def createtables():
         cursor = mysql.connection.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTO_INCREMENT, wedding_id INTEGER, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL );")
         cursor.execute("CREATE TABLE IF NOT EXISTS wedding_details ( id INT AUTO_INCREMENT PRIMARY KEY, theme VARCHAR(255) NOT NULL, grooms_name VARCHAR(255) NOT NULL, brides_name VARCHAR(255) NOT NULL, wedding_date DATE NOT NULL, wedding_location TEXT NOT NULL, city_name VARCHAR(255) NOT NULL, location_url VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL );")
-        cursor.execute("CREATE TABLE IF NOT EXISTS reservation ( id INT AUTO_INCREMENT PRIMARY KEY, wedding_id INT, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, will_attend BOOLEAN, note TEXT );")
+        cursor.execute("CREATE TABLE IF NOT EXISTS reservation ( id INT AUTO_INCREMENT PRIMARY KEY, wedding_id INT, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, will_attend BOOLEAN, guests VARCHAR(20) NOT NULL, note TEXT );")
     
     except Exception as e:
         print(f"ERROR OCCURRED: {e}")
@@ -370,6 +370,7 @@ def reservation():
         email = request.form.get("email")
         phone = request.form.get("phone")
         will_attend = request.form.get("will_attend")
+        guests = request.form.get("guests")
         note = request.form.get("note")
 
         try:
@@ -382,7 +383,7 @@ def reservation():
             
         
         else:
-            cursor.execute("INSERT INTO reservation (wedding_id, name, email, phone, will_attend, note) VALUES (%s, %s, %s, %s, %s, %s);", (wedding_id, name, email, phone, will_attend, note))
+            cursor.execute("INSERT INTO reservation (wedding_id, name, email, phone, will_attend, guests,note) VALUES (%s,%s, %s, %s, %s, %s, %s);", (wedding_id, name, email, phone, will_attend, guests, note))
             mysql.connection.commit()
             cursor.close()  
             flash("Data Submitted :)")
@@ -409,12 +410,16 @@ def entries():
             cursor.execute(sql,value)
             wedding_id = cursor.fetchone()
 
-            sql = "SELECT name, email, phone, will_attend, note FROM reservation WHERE wedding_id = %s;"
+            sql = "SELECT name, email, phone, will_attend, guests, note FROM reservation WHERE wedding_id = %s;"
             value=(wedding_id,)
             cursor.execute(sql,value)
             attendies = cursor.fetchall()
-            print(attendies)
-        return render_template('entries.html',attendies=attendies)
+            
+            sql = 'SELECT sum(guests) FROM reservation WHERE wedding_id = %s;'
+            value=(wedding_id,)
+            cursor.execute(sql,value)
+            total_guests = cursor.fetchone()
+        return render_template('entries.html',attendies=attendies,total_guests=total_guests)
 
 if __name__ == '__main__':
     app.run(host=os.getenv('DOMAIN'),port=80,debug=True)

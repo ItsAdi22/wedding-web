@@ -9,11 +9,12 @@
           <th scope="col">Email</th>
           <th scope="col">Phone</th>
           <th scope="col">Will Attend (Yes/No)</th>
+          <th scope="col">No of Guests</th>
           <th scope="col">Note</th>
         </tr>
       </thead>
       <tbody>
-        {% for i,j,k,l,m in attendies %}
+        {% for i,j,k,l,m,n in attendies %}
         <tr>
           <td>{{i}}</td>
           <td>{{j}}</td>
@@ -24,9 +25,11 @@
           <td>No</td>
           {% endif %}
           <td>{{m}}</td>
+          <td>{{n}}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
+    <h5>Total Guests: {{total_guests[0]}}</h5>
   </div>
 {% endblock entries %}
