@@ -1,17 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Wedding</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom Styles */
+    .jumbotron {
+      background-image: url('wedding-banner.jpg');
+      background-size: cover;
+      color: #fff;
+      text-align: center;
+      padding: 100px 0;
+    }
+    .section {
+      padding: 50px 0;
+    }
+  </style>
 </head>
 <body>
-                    {{theme}}
-                    {{grooms_name}}
-                    {{brides_name}}
-                    {{wedding_date}}
-                    {{wedding_location}} 
-                    {{city_name}} 
-                    {{location_url}}
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">Our Wedding</a>
+    </div>
+  </nav>
+
+  <!-- Jumbotron Section -->
+  <div class="jumbotron">
+    <h1 class="display-4">Welcome to Our Wedding</h1>
+    <p class="lead">Join us in celebrating the union of</p>
+    <h2>Groom Name</h2>
+    <h2>Bride Name</h2>
+  </div>
+
+  <!-- Main Content Section -->
+  <div class="container section">
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Description of Groom</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit quam et justo ultrices, id vestibulum lacus consequat. Nulla facilisi.</p>
+      </div>
+      <div class="col-md-6">
+        <h2>Description of Bride</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit quam et justo ultrices, id vestibulum lacus consequat. Nulla facilisi.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Location</h2>
+        <p>123 Main Street, Cityville, State, Country</p>
+      </div>
+      <div class="col-md-6">
+        <h2>Date</h2>
+        <p>January 1, 2025</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Gallery</h2>
+        <img src="groom.jpg" alt="Groom" class="img-fluid">
+      </div>
+      <div class="col-md-6">
+        <h2>&nbsp;</h2>
+        <img src="bride.jpg" alt="Bride" class="img-fluid">
+      </div>
+    </div>
+  </div>
+
+  <!-- Reservation Form Section -->
+  <div class="container section">
+    <h2>RSVP</h2>
+    <form action="#" method="post">
+      <input type="hidden" name="wedding_id" value="1">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="text" class="form-control" id="phone" name="phone" required>
+      </div>
+      <div class="form-group">
+        <label>Will you attend?</label><br>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="will_attend" id="attend_yes" value="Yes" required>
+          <label class="form-check-label" for="attend_yes">Yes</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="will_attend" id="attend_no" value="No" required>
+          <label class="form-check-label" for="attend_no">No</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="guests">Number of Guests</label>
+        <select class="form-control" id="guests" name="guests" required>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5+</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="note">Special Requests / Notes</label>
+        <textarea class="form-control" id="note" name="note" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="footer bg-dark text-white text-center py-3">
+    <div class="container">
+      <span>Our Wedding &copy; 2025</span>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
