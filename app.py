@@ -11,7 +11,7 @@ load_dotenv()
 app = Flask(__name__)
 mysql = MySQL(app)
 
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -33,12 +33,15 @@ def store_images(wedding_id, groom_image, bride_image):
     os.makedirs(upload_dir, exist_ok=True)
 
     # rename the images
-    groom_filename = f"groom_image.{groom_image.filename.split('.')[-1]}"
-    bride_filename = f"bride_image.{bride_image.filename.split('.')[-1]}"
-    # Save groom image
-    groom_image.save(os.path.join(upload_dir, groom_filename))
-    # Save bride image
-    bride_image.save(os.path.join(upload_dir, bride_filename))
+    if groom_image or bride_image is not None:
+        groom_filename = f"groom_image.{groom_image.filename.split('.')[-1]}"
+        bride_filename = f"bride_image.{bride_image.filename.split('.')[-1]}"
+        # Save groom image
+        groom_image.save(os.path.join(upload_dir, groom_filename))
+        # Save bride image
+        bride_image.save(os.path.join(upload_dir, bride_filename))
+    else:
+        print("blank data submitted")
     
     flash('Images uploaded successfully')
 
@@ -211,9 +214,19 @@ def create():
             
             #process groom and bride images
             elif form2.validate_on_submit():
-                groom_image = form2.groom.data
-                bride_image = form2.bride.data
+                groom_image = form2.groom.data or None
+                bride_image = form2.bride.data or None
                 store_images(wedding_id, groom_image, bride_image)
+                
+                # if there are more than two images in folder
+                folder_path = os.path.join(app.config['UPLOAD_FOLDER'], str(wedding_id[0]))
+                images = os.listdir(folder_path)
+
+                if (len(images) >2):
+                    try:
+                        os.remove(folder_path)
+                    except PermissionError as e:
+                        flash(f"Please Contact administrator: {e}")
                 return redirect(url_for('create'))
             else:
                 try:
@@ -252,15 +265,23 @@ def userpage(userinput):
             form = ReservationForm()
             try:
                 cursor = mysql.connection.cursor()
+                
                 sql = "SELECT email FROM users WHERE id = %s;"
                 cursor.execute(sql, (userinput,))
+
+                useridfound = cursor.fetchone()
+
+                #get wedding id
+                sql = "SELECT wedding_id FROM users WHERE email = %s"
+                cursor.execute(sql,useridfound)
+                wedding_id = cursor.fetchone()
                 
             except Exception as e:
                 flash(f'ERROR OCCURRED: {e}')
                 return redirect(url_for('home'))
             
             else:
-                useridfound = cursor.fetchone()
+                
 
                 if useridfound:
                     sql = "SELECT theme, grooms_name, brides_name, wedding_date, wedding_location, city_name, location_url FROM wedding_details WHERE email = %s"
@@ -277,8 +298,6 @@ def userpage(userinput):
                         location_url = data[6]
                     
                         #calculate date
-                        
-                        print(f'WEDDING DATE -----<>---> {wedding_date}')
                         # Parse the date string into a datetime object
                         # Check if wedding_date is already a datetime.date object
                         if isinstance(wedding_date, datetime.date):
@@ -308,13 +327,30 @@ def userpage(userinput):
                             remaining_hours = int((total_seconds % (24 * 60 * 60)) // 3600)
                             remaining_minutes = int((total_seconds % 3600) // 60)
                             remaining_seconds = int(total_seconds % 60)
-                        
+
+                            # now get the groom and bride images:
+                            folder_path = os.path.join(app.config['UPLOAD_FOLDER'], str(wedding_id[0]))
+                            
+                            images = os.listdir(folder_path)
+
+                            print(f'images len---> {len(images)}')
+                            
+                            
+                            if (len(images) == 2):
+                                groom_image = images[1] 
+                                bride_image = images[0] 
+
+                            else:
+                                groom_image = False
+                                bride_image = False
+                            print(f'groom img ====> {groom_image}')
+                            print(f'groom img ====> {bride_image}')
                     except Exception as e:
                         print(f'SOME OR ALL DATA IS MISSING: {e}')
                         return redirect(url_for('home'))
                     
                     else:
-                        return render_template(f'{theme}/index.html',grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url,form=form,days=remaining_days,hours=remaining_hours,minutes=remaining_minutes,seconds=remaining_seconds)
+                        return render_template(f'{theme}/index.html',grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url,form=form,days=remaining_days,hours=remaining_hours,minutes=remaining_minutes,seconds=remaining_seconds,groom_image=groom_image,bride_image=bride_image,images=images,wedding_id=str(wedding_id[0]))
                 else:
                     print("user not found")
                     return redirect(url_for('home'))
