@@ -397,9 +397,19 @@ def reservation():
         else:
             cursor.execute("INSERT INTO reservation (wedding_id, name, email, phone, will_attend, guests,note) VALUES (%s,%s, %s, %s, %s, %s, %s);", (wedding_id, name, email, phone, will_attend, guests, note))
             mysql.connection.commit()
+
+            sql = "SELECT id FROM users WHERE wedding_id = %s"
+            value = (wedding_id,)
+            cursor.execute(sql,value)
+            userid = cursor.fetchone()
+            if userid:
+                userinput = userid[0]
+            else:
+                flash("Invalid wedding Id")
+                return redirect(url_for('home'))
             cursor.close()  
             flash("Data Submitted :)")
-            return redirect(url_for('home'))
+            return redirect(url_for('userpage',userinput = userinput))
         
     else:
         flash("Alert: Form not validated")
