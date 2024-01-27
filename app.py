@@ -160,7 +160,7 @@ def logout():
     return redirect(url_for('home'))
 
 ###################################### ROUTES FOR LOGIN/SIGNUP END ######################################
-@app.route('/create',methods=['POST','GET'])
+@app.route('/dashboard',methods=['POST','GET'])
 def create():
     if 'email' in session:
         form = WeddingDetailsForm()

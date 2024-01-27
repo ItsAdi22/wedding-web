@@ -9,7 +9,7 @@
     .form-container {
     display: flex;
     justify-content: space-evenly;
-    width: 70%;
+    width: 75%;
     margin: 0 auto;
     }
 
@@ -31,7 +31,7 @@
 
 <div class="form-container">
     <form method="POST" action="{{ url_for('create') }}" class="form">
-        {{ form.csrf_token }}
+        {{ form.hidden_tag() }}
 
         <h2 class="text-center mb-4">Wedding Details</h2>
 
@@ -72,7 +72,8 @@
         <div class="form-group">
             {{ form.wedding_location.label(class="form-label") }}
             {% if wedding_location %}
-            {{ form.wedding_location(class="form-control", rows="3", placeholder="Enter wedding location", value=wedding_location) }}
+            <textarea name="wedding_location" rows="3" class="form-control">{{wedding_location}}</textarea>
+            <!-- {{ form.wedding_location(class="form-control", rows="3", placeholder="Enter wedding location", value=wedding_location) }} -->
             {% else %}
             {{ form.wedding_location(class="form-control", rows="3", placeholder="Enter wedding location") }}
             {% endif %}
