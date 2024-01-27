@@ -41,3 +41,6 @@ class CoupleImageForm(FlaskForm):
     groom = FileField('Groom Image', validators=[DataRequired()])
     bride = FileField('Bride Image', validators=[DataRequired()])
     submit = SubmitField('Upload')
+
+class DeleteCoupleImage(FlaskForm):
+    submit = SubmitField('Delete Images')

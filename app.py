@@ -1,6 +1,6 @@
 from flask import Flask, render_template,redirect ,url_for, request, flash, session
 from flask_mysqldb import MySQL
-from forms import SignupForm,LoginForm,WeddingDetailsForm,ReservationForm,CoupleImageForm
+from forms import SignupForm,LoginForm,WeddingDetailsForm,ReservationForm,CoupleImageForm,DeleteCoupleImage
 from dotenv import load_dotenv
 import os
 import random
@@ -165,6 +165,7 @@ def create():
     if 'email' in session:
         form = WeddingDetailsForm()
         form2 = CoupleImageForm()
+        form3 = DeleteCoupleImage()
         email = session['email']
         domain = app.config['DOMAIN']
         
@@ -230,6 +231,17 @@ def create():
                         flash("You cannot upload more than two images!")
                 
                 return redirect(url_for('create'))
+            
+            elif form3.validate_on_submit():
+                folder_path = os.path.join(app.config['UPLOAD_FOLDER'], str(wedding_id[0]))
+                images = os.listdir(folder_path)
+                
+                for x in os.listdir(folder_path):
+                        file_path = os.path.join(folder_path,x)
+                        if os.path.isfile(file_path):
+                            os.remove(file_path)
+                        
+                return redirect(url_for('create'))
             else:
                 try:
                     cursor = mysql.connection.cursor()
@@ -255,7 +267,7 @@ def create():
                     folder_path = os.path.join(app.config['UPLOAD_FOLDER'], str(wedding_id[0]))
                     images = os.listdir(folder_path)
                     images_count = len(images)
-                    return render_template('dashboard.html',form=form,wedding_id=wedding_id,form2=form2,userid=userid[0],domain=domain,grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url,images_count=images_count)  
+                    return render_template('dashboard.html',form=form,form2=form2,form3=form3,wedding_id=wedding_id,userid=userid[0],domain=domain,grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url,images_count=images_count)  
     else:
         return redirect(url_for('login'))
     

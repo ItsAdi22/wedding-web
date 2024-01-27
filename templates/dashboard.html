@@ -7,15 +7,21 @@
     }
 
     .form-container {
-        display: flex;
-        justify-content: space-between;
-        max-width: 800px; /* Adjust as needed */
-        margin: 0 auto;
+    display: flex;
+    justify-content: space-evenly;
+    width: 70%;
+    margin: 0 auto;
     }
 
-    .form {
-        width: 48%; /* Adjust as needed */
-    }
+.form {
+
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  width: 30%;
+}
+
+
 </style>
 {% endblock detailscss %}
 
@@ -23,7 +29,7 @@
 <h6>YOUR WEDDING ID: {{wedding_id[0]}}</h6>
 <h6>YOUR WEBSITE URL: <a href="http://{{domain}}/{{userid}}" target="_blank"> Click Here</a></h6>
 
-<div class="container mt-5 form-container">
+<div class="form-container">
     <form method="POST" action="{{ url_for('create') }}" class="form">
         {{ form.csrf_token }}
 
@@ -93,7 +99,8 @@
         {{ form.submit(class="btn btn-primary btn-block") }}
     </form>
 
-    <form method="POST" action="{{url_for('create')}}" enctype="multipart/form-data" class="form">
+    <div class="form">
+    <form method="POST" action="{{url_for('create')}}" enctype="multipart/form-data">
         {{ form2.hidden_tag() }}
         <h2 class="text-center mb-4">Image Section</h2>
         <div class="mb-3">
@@ -105,7 +112,16 @@
             {{ form2.bride(class="form-control", accept="image/*", required=true) }}
         </div>
         {{ form2.submit(class="btn btn-primary") }} <br>
-        <small>Images uploaded: {{images_count}}</small>
+        
+        
     </form>
+    <br>
+        <form method="POST" action="{{ url_for('create') }}">
+            {{ form3.hidden_tag() }}
+            {{ form3.submit(class="btn btn-danger") }}
+        </form>
+        <small>Images uploaded: {{images_count}}</small>
+    </div>
+    
 </div>
 {% endblock details %}
