@@ -267,7 +267,8 @@ def create():
                     folder_path = os.path.join(app.config['UPLOAD_FOLDER'], str(wedding_id[0]))
                     images = os.listdir(folder_path)
                     images_count = len(images)
-                    return render_template('dashboard.html',form=form,form2=form2,form3=form3,wedding_id=wedding_id,userid=userid[0],domain=domain,grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url,images_count=images_count)  
+
+                    return render_template('dashboard.html',form=form,form2=form2,form3=form3,theme=theme,wedding_id=wedding_id,userid=userid[0],domain=domain,grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url,images_count=images_count)  
     else:
         return redirect(url_for('login'))
     

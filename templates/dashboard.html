@@ -47,7 +47,11 @@
 
         <div class="form-group">
             {{ form.theme.label(class="form-label") }}
+            {% if theme %}
+            {{ form.theme(class="form-control", value=theme) }}
+            {% else %}
             {{ form.theme(class="form-control") }}
+            {% endif %}
         </div>
 
         <div class="form-group">
