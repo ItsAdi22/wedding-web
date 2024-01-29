@@ -341,7 +341,7 @@ def userpage(userinput):
                                 given_date = datetime.datetime.strptime(wedding_date, "%Y-%m-%d").date()
                             except ValueError:
                                 print("Invalid date format. Please use YYYY-MM-DD format.")
-                                # Handle the error as needed
+                                return redirect(url_for('home'))
 
                         # Proceed with the calculations if parsing was successful
                         if given_date:
@@ -386,7 +386,7 @@ def userpage(userinput):
                         
                         #convert wedding date in string format
                         wedding_date = (f'{str(wedding_date)[8:10]}th {months_dict[str(wedding_date)[5:7]]} {str(wedding_date)[0:4]}')
-                        
+
                         return render_template(f'{theme}/index.html',grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url,form=form,days=remaining_days,hours=remaining_hours,minutes=remaining_minutes,seconds=remaining_seconds,groom_image=groom_image,bride_image=bride_image,images=images,wedding_id=str(wedding_id[0]))
                 else:
                     print("user not found")
