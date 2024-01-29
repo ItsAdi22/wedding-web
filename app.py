@@ -26,6 +26,7 @@ app.config["MYSQL_PASSWORD"] = os.getenv('MYSQL_PASSWORD')
 def generate_random_code():
     return str(random.randint(10000, 99999))
 
+
 # Function to store the uploaded images based on wedding_id
 def store_images(wedding_id, groom_image, bride_image):
     # Create a directory if it doesn't exist
@@ -45,7 +46,21 @@ def store_images(wedding_id, groom_image, bride_image):
     
     flash('Images uploaded successfully')
 
-
+# To get the month of wedding in text format
+months_dict = {
+    "01": "January",
+    "02": "February",
+    "03": "March",
+    "04": "April",
+    "05": "May",
+    6: "June",
+    7: "July",
+    8: "August",
+    9: "September",
+    10: "October",
+    11: "November",
+    12: "December"
+}
 
 @app.route('/tables')
 def createtables():
@@ -368,6 +383,10 @@ def userpage(userinput):
                         return redirect(url_for('home'))
                     
                     else:
+                        
+                        #convert wedding date in string format
+                        wedding_date = (f'{str(wedding_date)[8:10]}th {months_dict[str(wedding_date)[5:7]]} {str(wedding_date)[0:4]}')
+                        
                         return render_template(f'{theme}/index.html',grooms_name=grooms_name,brides_name=brides_name,wedding_date=wedding_date,wedding_location=wedding_location,city_name=city_name,location_url=location_url,form=form,days=remaining_days,hours=remaining_hours,minutes=remaining_minutes,seconds=remaining_seconds,groom_image=groom_image,bride_image=bride_image,images=images,wedding_id=str(wedding_id[0]))
                 else:
                     print("user not found")
