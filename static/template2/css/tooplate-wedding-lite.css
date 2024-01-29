@@ -405,17 +405,7 @@ strong {
 /*---------------------------------------
   HERO              
 -----------------------------------------*/
-.hero-container {
-  background-color: #d9d8d6;
-  background-image: url('../images/couple-hugging-laughing-near-wall.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  border-radius: var(--border-radius-small);
-  position: relative;
-  overflow: hidden;
-  padding: 50px;
-  height: calc(90vh - 98px);
-}
+
 
 .hero-container h2 {
   color: var(--custom-btn-bg-color);
@@ -556,13 +546,7 @@ strong {
 /*---------------------------------------
   RSVP              
 -----------------------------------------*/
-.rsvp-section {
-  background-image: url('../images/closeup-shot-newlywed-couple-sitting-bench.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-}
-
+/* note: some css is in index file */
 .rsvp-form-wrap {
   background: var(--white-color);
   border-radius: var(--border-radius-medium);
@@ -644,15 +628,8 @@ strong {
 /*---------------------------------------
   SITE FOOTER              
 -----------------------------------------*/
-.site-footer {
-  background-image: url('../images/young-asian-pregnant-couple-using-laptop.jpeg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  padding-top: 150px;
-  padding-bottom: 150px;
-  text-align: center;
-  position: relative;
-}
+
+/* note to dev: some footer css is in index */
 
 .site-footer::after {
   content: "";

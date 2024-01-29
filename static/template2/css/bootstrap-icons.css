@@ -1,8 +1,4 @@
-@font-face {
-  font-family: "bootstrap-icons";
-  src: url("{{url_for('static',filename='template2/fonts/bootstrap-icons.woff2')}}?30af91bf14e37666a085fb8a161ff36d") format("woff2"),
-url("{{url_for('static',filename='template2/fonts/bootstrap-icons.woff')}}?30af91bf14e37666a085fb8a161ff36d") format("woff");
-}
+
 
 .bi::before,
 [class^="bi-"]::before,
