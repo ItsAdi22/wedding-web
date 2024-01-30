@@ -11,11 +11,9 @@
 
     <style>
         /* Add your custom styles here */
-        body {
-            padding-top: 56px; /* Adjusted for the fixed navbar height */
-        }
+
     </style>
-    
+    {% block homecss %} {% endblock homecss %}
     {% block signupcss %} {% endblock signupcss %}
     {% block logincss %} {% endblock logincss %}
     {% block detailscss %} {% endblock detailscss %}
@@ -76,9 +74,5 @@
 
 
 
-    <!-- Bootstrap JS and Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

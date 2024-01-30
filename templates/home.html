@@ -1,12 +1,176 @@
 {% extends 'header.html' %}
+{% block homecss %}
+<style>
+body {
+    background: hsla(50, 90%, 88%, 1);
+
+    background: linear-gradient(45deg, hsla(50, 90%, 88%, 1) 0%, hsla(335, 93%, 68%, 1) 50%, hsla(252, 89%, 78%, 1) 100%);
+
+    background: -moz-linear-gradient(45deg, hsla(50, 90%, 88%, 1) 0%, hsla(335, 93%, 68%, 1) 50%, hsla(252, 89%, 78%, 1) 100%);
+
+    background: -webkit-linear-gradient(45deg, hsla(50, 90%, 88%, 1) 0%, hsla(335, 93%, 68%, 1) 50%, hsla(252, 89%, 78%, 1) 100%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#FCF3C4", endColorstr="#F962A0", GradientType=1 );
+    padding-top: 56px; /* Adjusted for the fixed navbar height */
+    
+    /* BUTTON CODE*/
+    .button {
+  position: relative;
+  padding: 10px 22px;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+  transition: all 0.2s ease;
+}
+
+.button:active {
+  transform: scale(0.96);
+}
+
+.button:before,
+.button:after {
+  position: absolute;
+  content: "";
+  width: 150%;
+  left: 50%;
+  height: 100%;
+  transform: translateX(-50%);
+  z-index: -1000;
+  background-repeat: no-repeat;
+}
+
+.button:hover:before {
+  top: -70%;
+  background-image: radial-gradient(circle, #a89215 20%, transparent 20%),
+    radial-gradient(circle, transparent 20%, #13a5be 20%, transparent 30%),
+    radial-gradient(circle, #a3b82d 20%, transparent 20%),
+    radial-gradient(circle, #590cbe 20%, transparent 20%),
+    radial-gradient(circle, transparent 10%, #bd1717 15%, transparent 20%),
+    radial-gradient(circle, #2a7ce8 20%, transparent 20%),
+    radial-gradient(circle, #30e82a 20%, transparent 20%),
+    radial-gradient(circle, #e92c75 20%, transparent 20%),
+    radial-gradient(circle, #914fe7 20%, transparent 20%);
+  background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
+    10% 10%, 18% 18%;
+  background-position: 50% 120%;
+  animation: greentopBubbles 0.6s ease;
+}
+
+@keyframes greentopBubbles {
+  0% {
+    background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%,
+      40% 90%, 55% 90%, 70% 90%;
+  }
+
+  50% {
+    background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%,
+      50% 50%, 65% 20%, 90% 30%;
+  }
+
+  100% {
+    background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%,
+      50% 40%, 65% 10%, 90% 20%;
+    background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+  }
+}
+
+.button:hover::after {
+  bottom: -70%;
+  background-image: radial-gradient(circle, #ff93db 20%, transparent 20%),
+    radial-gradient(circle, #2ae8df 20%, transparent 20%),
+    radial-gradient(circle, transparent 10%, #71ffbd 15%, transparent 20%),
+    radial-gradient(circle, #2a9ce8 20%, transparent 20%),
+    radial-gradient(circle, #7814fc 20%, transparent 20%),
+    radial-gradient(circle, #73e4f8 20%, transparent 20%),
+    radial-gradient(circle, #f8d3a9 20%, transparent 20%);
+  background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 20% 20%, 18% 18%;
+  background-position: 50% 0%;
+  animation: greenbottomBubbles 0.6s ease;
+}
+
+@keyframes greenbottomBubbles {
+  0% {
+    background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%,
+      70% -10%, 70% 0%;
+  }
+
+  50% {
+    background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%,
+      105% 0%;
+  }
+
+  100% {
+    background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%,
+      110% 10%;
+    background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+  }
+}
+/* CARD CSS FROM HERE */
+
+}
+</style>
+{% endblock homecss %}
 
 {% block home %}
-    <!-- Main Content -->
-    <div class="container mt-5">
-        <div class="text-center">
-            <h1>Create Your Wedding Website Within Seconds!</h1>
-            <p class="lead">Share your special moments with a personalized wedding website</p>
-            <a href="{{url_for('create')}}" class="btn btn-primary btn-lg">Get Started</a>
-        </div>
+  <div class="hero-section d-flex align-items-center justify-content-center min-vh-100" style="background-image: url('/images/hero-background.jpg'); background-size: cover; background-position: center;">
+    <div class="container text-center text-white">
+      <h1 class="display-4 fw-bold">Celebrate Your Love in Style</h1>
+      <p class="lead">Create a stunning wedding website in seconds with our user-friendly tools and beautiful templates.</p>
+      <a href="{{ url_for('create') }}" class="button">Get Started Now</a>
     </div>
+  </div>
+
+  <section class="features-section my-5">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+          <i class="bi bi-heart-fill fa-3x text-primary mb-3"></i>
+          <h3>Easy RSVP Management</h3>
+          <p>Gather your guests' wishes and dietary restrictions with our elegant and customizable RSVP forms.</p>
+        </div>
+        <div class="col">
+          <i class="bi bi-gear fa-3x text-primary mb-3"></i>
+          <h3>User-Friendly Interface</h3>
+          <p>No coding required! Drag, drop, and personalize your website with ease, thanks to our intuitive interface.</p>
+        </div>
+        <div class="col">
+          <i class="bi bi-alarm fa-3x text-primary mb-3"></i>
+          <h3>Wedding Countdown Timer</h3>
+          <p>Keep your guests excited with a live countdown timer that displays the days, hours, and minutes until your big day.</p>
+        </div>
+        <div class="col">
+          <i class="bi bi-phone fa-3x text-primary mb-3"></i>
+          <h3>Mobile-Friendly Design</h3>
+          <p>Your website will look perfect on any device, ensuring your guests can access it easily at any time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials-section my-5">
+    <div class="container">
+      <h2 class="text-center mb-4">What our users say</h2>
+      <div class="owl-carousel owl-theme">
+        <div class="item">
+          <div class="card">
+            <div class="card-body">
+              <p>"We loved using your website builder to create our wedding website! It was so easy and fun, and it looked amazing." - John & Mary</p>
+              <img src="/images/profile1.jpg" alt="" class="img-fluid rounded-circle mx-auto" style="width: 50px; height: 50px;">
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="card">
+            <div class="card-body">
+              <p>"The RSVP feature was a lifesaver! It made it so much easier to track our guest list and preferences." - Sarah & James</p>
+              <img src="/images/profile2.jpg" alt="" class="img-fluid rounded-circle mx-auto" style="width: 50px; height: 50px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 {% endblock home %}

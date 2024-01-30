@@ -2,13 +2,25 @@
 
 {% block signupcss %}
 <style>
-    body {
-            padding-top: 56px; /* Adjusted for the fixed navbar height */
-        }
     .form-container {
         max-width: 400px;
         margin: 0 auto;
     }
+    body {
+            padding-top: 56px; /* Adjusted for the fixed navbar height */
+            background: hsla(50, 90%, 88%, 1);
+
+            background: linear-gradient(315deg, hsla(50, 90%, 88%, 1) 0%, hsla(335, 93%, 68%, 1) 50%, hsla(252, 89%, 78%, 1) 100%);
+
+            background: -moz-linear-gradient(315deg, hsla(50, 90%, 88%, 1) 0%, hsla(335, 93%, 68%, 1) 50%, hsla(252, 89%, 78%, 1) 100%);
+
+            background: -webkit-linear-gradient(315deg, hsla(50, 90%, 88%, 1) 0%, hsla(335, 93%, 68%, 1) 50%, hsla(252, 89%, 78%, 1) 100%);
+
+            filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#FCF3C4", endColorstr="#F962A0", GradientType=1 );
+        }
+    
+
+    
 </style>
 {% endblock signupcss %}
 

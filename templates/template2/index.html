@@ -178,7 +178,11 @@
 
                         <div class="col-lg-3 col-12">
                             <div class="image-hover-thumb">
-                                <img src="{{url_for('static',filename='template2/img/vertical-shot-beautiful-smiling-girl.jpg')}}" class="about-image img-fluid" alt="">
+                                {% if bride_image %}
+                                <img src="{{url_for('static', filename='uploads/' + wedding_id + '/' + bride_image)}}" class="about-image img-fluid" alt="bride-image">
+                                {% else %}
+                                <img src="{{url_for('static',filename='template2/img/vertical-shot-beautiful-smiling-girl.jpg')}}" >
+                                {% endif %}
                             </div>
                         </div>
 
@@ -208,7 +212,11 @@
 
                         <div class="col-lg-3 col-12">
                             <div class="image-hover-thumb">
+                                {% if groom_image %}
+                                <img src="{{url_for('static', filename='uploads/' + wedding_id + '/' + groom_image)}}" class="about-image img-fluid" alt="">
+                                {% else %}
                                 <img src="{{url_for('static',filename='template2/img/vertical-shot-young-handsome-guy-autumn-park.jpg')}}" class="about-image img-fluid" alt="">
+                                {% endif %}
                             </div>
                         </div>
 
@@ -539,7 +547,7 @@
                                     </div>
                                 </div>
 
-                                <h5 class="mb-4">Will you attend? <span class="text-muted">Please reserve before March 2th, 2022</span></h5>
+                                <h5 class="mb-4">Will you attend? <span class="text-muted">Please reserve before {{wedding_date}}</span></h5>
 
                                 <form class="custom-form rsvp-form" method="POST" action="{{ url_for('reservation') }}">
                                     {{ form.csrf_token }}
