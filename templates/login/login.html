@@ -4,13 +4,16 @@
 <style>
     /* Add your custom styles here */
     body {
-    padding-top: 56px; /* Adjusted for the fixed navbar height */
-    background: hsla(50, 90%, 88%, 1); /* Base background color */
-    background: linear-gradient(315deg, hsla(50, 90%, 88%, 1) 0%, hsla(335, 93%, 68%, 1) 50%, hsla(252, 89%, 78%, 1) 100%); /* Linear gradient */
-    background: -moz-linear-gradient(315deg, hsla(50, 90%, 88%, 1) 0%, hsla(335, 93%, 68%, 1) 50%, hsla(252, 89%, 78%, 1) 100%); /* Mozilla Firefox gradient */
-    background: -webkit-linear-gradient(315deg, hsla(50, 90%, 88%, 1) 0%, hsla(335, 93%, 68%, 1) 50%, hsla(252, 89%, 78%, 1) 100%); /* Webkit browsers gradient */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#FCF3C4", endColorstr="#F962A0", GradientType=1); /* Internet Explorer gradient */
-    
+        padding-top: 56px; /* Adjusted for the fixed navbar height */
+    }
+
+    body {
+    background-color: hsla(50, 90%, 88%, 1);
+    background-image: linear-gradient(315deg, hsla(50, 90%, 88%, 1) 0%, hsla(335, 93%, 68%, 1) 50%, hsla(252, 89%, 78%, 1) 100%);
+    background-size: 100% 100%; /* Ensure the background covers the entire element */
+    background-repeat: no-repeat; /* Prevent repeating of the background */
+    background-position: top right; /* Start the gradient from top right */
+    background-attachment: fixed; /* Fix the background to prevent scrolling */
 }
 
     .form-container {
@@ -36,7 +39,9 @@
             {{ form.password(class="form-control", placeholder="Enter your password", required="required") }}
         </div>
         <br>
-        {{ form.submit(class="btn btn-primary btn-block") }}
+        {{ form.submit(class="bg-pink-500 border-3 border-black rounded-md shadow-md hover:bg-pink-600 text-white font-bold py-2 px-4 rounded ") }}
+
+
     </form>
 </div>
 {% endblock login %}
