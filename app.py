@@ -467,7 +467,7 @@ def entries():
 # admin panel
 @app.route('/admin',methods=['POST','GET'])
 def admin():
-    return render_template("admin/index.html")
+    return render_template('admin/index.html')
 
 if __name__ == '__main__':
     app.run(host=os.getenv('DOMAIN'),port=80,debug=True)
