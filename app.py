@@ -54,13 +54,13 @@ months_dict = {
     "03": "March",
     "04": "April",
     "05": "May",
-    6: "June",
-    7: "July",
-    8: "August",
-    9: "September",
-    10: "October",
-    11: "November",
-    12: "December"
+    "06": "June",
+    "07": "July",
+    "08": "August",
+    "09": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
 }
 
 @app.route('/tables')
