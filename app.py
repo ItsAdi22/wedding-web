@@ -18,8 +18,7 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['DOMAIN'] = os.getenv('DOMAIN')
 
 app.config["MYSQL_HOST"] = os.getenv('MYSQL_HOST')
-# app.config["MYSQL_DB"] = os.getenv('MYSQL_DB')
-app.config["MYSQL_DB"] = "wed"
+app.config["MYSQL_DB"] = os.getenv('MYSQL_DB')
 app.config["MYSQL_USER"] = os.getenv('MYSQL_USER')
 app.config["MYSQL_PASSWORD"] = os.getenv('MYSQL_PASSWORD')
 
@@ -296,7 +295,7 @@ def create():
 
                     except Exception as e:
                         print(f'ERROR OCCURRED: {e}')
-                        
+
                     images = os.listdir(folder_path)
                     images_count = len(images)
 
