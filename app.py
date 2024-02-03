@@ -248,7 +248,7 @@ def create():
                         file_path = os.path.join(folder_path,x)
                         if os.path.isfile(file_path):
                             os.remove(file_path)
-                        flash("You cannot upload more than two images!")
+                    flash("You cannot upload more than two images!")
                 
                 return redirect(url_for('create'))
             
@@ -398,7 +398,7 @@ def userpage(userinput):
                             given_date_tz = datetime.datetime.combine(given_date, datetime.time.min).astimezone(target_timezone)
                             current_date_tz = datetime.datetime.now(target_timezone)
 
-                            difference =  given_date_tz- current_date_tz
+                            difference =  given_date_tz - current_date_tz
 
                             # Calculate remaining time components
                             total_seconds = difference.total_seconds()
