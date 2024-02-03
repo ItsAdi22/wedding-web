@@ -276,13 +276,27 @@ def create():
                 else:
                     
                     wedding_details = cursor.fetchone()
-                    theme = wedding_details[0]
-                    grooms_name = wedding_details[1]
-                    brides_name = wedding_details[2]
-                    wedding_date = wedding_details[3]
-                    wedding_location = wedding_details[4]
-                    city_name = wedding_details[5]
-                    location_url = wedding_details[6]
+
+                    if wedding_details:
+                        theme = wedding_details[0] 
+                        grooms_name = wedding_details[1]
+                        brides_name = wedding_details[2]
+                        wedding_date = wedding_details[3]
+                        wedding_location = wedding_details[4]
+                        city_name = wedding_details[5]
+                        location_url = wedding_details[6]
+                    
+                    else:
+                        theme = "" 
+                        grooms_name = ""
+                        brides_name = ""
+                        wedding_date = ""
+                        wedding_location = ""
+                        city_name = ""
+                        location_url = ""
+                        print('No wedding details found for the provided email.')
+
+
 
                     folder_path = os.path.join(app.config['UPLOAD_FOLDER'], str(wedding_id[0]))
 
@@ -338,25 +352,41 @@ def userpage(userinput):
                     cursor.execute(sql,value)
                     data = cursor.fetchone()
                     try:
-                        theme = data[0]
-                        grooms_name = data[1]
-                        brides_name = data[2]
-                        wedding_date = data[3]
-                        wedding_location = data[4] 
-                        city_name = data[5] 
-                        location_url = data[6]
+                        if data:
+                            theme = data[0]
+                            grooms_name = data[1]
+                            brides_name = data[2]
+                            wedding_date = data[3]
+                            wedding_location = data[4] 
+                            city_name = data[5] 
+                            location_url = data[6]
+                        
+                        else:
+                            theme = "template1" # default theme
+                            grooms_name = ""
+                            brides_name = ""
+                            wedding_date = ""
+                            wedding_location = "" 
+                            city_name = "" 
+                            location_url = ""
+
                     
                         #calculate date
                         # Parse the date string into a datetime object
                         # Check if wedding_date is already a datetime.date object
                         if isinstance(wedding_date, datetime.date):
                             given_date = wedding_date  # No need to parse, use it directly
+
                         else:
+                            # setting a sample date if the wedding_date data is empty
+                            if (wedding_date == ""):
+                                wedding_date = "2001-11-09"
                             # Parse the date string into a datetime object
                             try:
                                 given_date = datetime.datetime.strptime(wedding_date, "%Y-%m-%d").date()
                             except ValueError:
                                 print("Invalid date format. Please use YYYY-MM-DD format.")
+                                print(given_date)
                                 return redirect(url_for('home'))
 
                         # Proceed with the calculations if parsing was successful
