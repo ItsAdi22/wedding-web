@@ -18,7 +18,8 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['DOMAIN'] = os.getenv('DOMAIN')
 
 app.config["MYSQL_HOST"] = os.getenv('MYSQL_HOST')
-app.config["MYSQL_DB"] = os.getenv('MYSQL_DB')
+# app.config["MYSQL_DB"] = os.getenv('MYSQL_DB')
+app.config["MYSQL_DB"] = "wed"
 app.config["MYSQL_USER"] = os.getenv('MYSQL_USER')
 app.config["MYSQL_PASSWORD"] = os.getenv('MYSQL_PASSWORD')
 
@@ -235,10 +236,14 @@ def create():
                 bride_image = form2.bride.data or None
                 store_images(wedding_id, groom_image, bride_image)
                 
-                # if there are more than two images in folder
+                
                 folder_path = os.path.join(app.config['UPLOAD_FOLDER'], str(wedding_id[0]))
+                print(f"folder path: {folder_path}")
+                # Create the directory if it doesn't already exist
+
                 images = os.listdir(folder_path)
 
+                # if there are more than two images in folder
                 if (len(images) > 2):
                     for x in os.listdir(folder_path):
                         file_path = os.path.join(folder_path,x)
@@ -281,6 +286,17 @@ def create():
                     location_url = wedding_details[6]
 
                     folder_path = os.path.join(app.config['UPLOAD_FOLDER'], str(wedding_id[0]))
+
+                    try:    
+                        if not os.path.exists(folder_path):
+                            os.makedirs(folder_path)
+                            print(f"Directory created at {folder_path}")
+                        else:
+                            print(f"Directory already exists at {folder_path}")
+
+                    except Exception as e:
+                        print(f'ERROR OCCURRED: {e}')
+                        
                     images = os.listdir(folder_path)
                     images_count = len(images)
 
