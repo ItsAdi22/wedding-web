@@ -44,3 +44,17 @@ class CoupleImageForm(FlaskForm):
 
 class DeleteCoupleImage(FlaskForm):
     submit = SubmitField('Delete Images')
+
+
+# ADMIN CLASS
+    
+class AdminLoginForm(FlaskForm):
+    email = EmailField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Login')
+
+class AdminSignupForm(FlaskForm):
+    email = EmailField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confpassword = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=6)])
+    submit = SubmitField('Login')

@@ -1,6 +1,6 @@
 from flask import Flask, render_template,redirect ,url_for, request, flash, session
 from flask_mysqldb import MySQL
-from forms import SignupForm,LoginForm,WeddingDetailsForm,ReservationForm,CoupleImageForm,DeleteCoupleImage
+from forms import SignupForm,LoginForm,WeddingDetailsForm,ReservationForm,CoupleImageForm,DeleteCoupleImage,AdminLoginForm,AdminSignupForm
 from dotenv import load_dotenv
 import os
 import random
@@ -535,8 +535,10 @@ def admin():
             else:
                 return render_template('admin/signup.html')
 
-@app.route('/admin/login')
+@app.route('/admin/login',method=["POST","GET"])
 def adminlogin():
+    form = AdminLoginForm()
+    form2 = AdminSignupForm()
     if 'admin' in session:
         return redirect(url_for('admin'))
     
