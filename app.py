@@ -515,10 +515,13 @@ def entries():
 # admin panel
 @app.route('/admin',methods=['POST','GET'])
 def admin():
+    form = AdminLoginForm()
+    form2 = AdminSignupForm()
     if 'admin' in session:
         return render_template('admin/index.html')
-    
+       
     else:
+
         try:
             cursor = mysql.connection.cursor()
             cursor.execute("SELECT * FROM admin")
@@ -530,20 +533,67 @@ def admin():
 
         else:
             if admin_exists:
-                return render_template('admin/login.html')
+                return render_template('admin/login.html',form=form)
             
             else:
-                return render_template('admin/signup.html')
+                return render_template('admin/signup.html',form2=form2)
 
-@app.route('/admin/login',method=["POST","GET"])
+@app.route('/admin/login',methods=["GET","POST"])
 def adminlogin():
     form = AdminLoginForm()
     form2 = AdminSignupForm()
-    if 'admin' in session:
-        return redirect(url_for('admin'))
-    
-    else:
-        pass
+    if 'admin' not in session:
+        #admin login
+        if form.validate_on_submit():
+            email = request.form.get("loginemail")
+            password = request.form.get("loginpassword")
+
+            try:
+                cursor = mysql.connection.cursor()
+
+            except Exception as e:
+                flash(f"ERROR OCCURRED: {e}")
+                print(f"ERROR OCCURRED: {e}")
+                return redirect(url_for("home"))
+
+            else:
+                cursor.execute('SELECT * FROM admin WHERE email = %s AND password IS NOT NULL AND password = %s', (email, password,))
+                adminacc = cursor.fetchone()
+
+                if adminacc:
+                    session['admin'] = email
+                    return redirect(url_for("admin"))
+                
+                else:
+                    return redirect(url_for("admin"))
+
+
+        #admin signup
+        elif form2.validate_on_submit():
+            email = request.form.get("email")
+            password = request.form.get("password")
+            confirmpass = request.form.get("confpassword")
+
+            print(f'email: {email} pass: {password} conf: {confirmpass}')
+            
+            if (password == confirmpass):
+                try:
+                    cursor = mysql.connection.cursor()
+                
+                except Exception as e:
+                    flash(f"ERROR OCCURRED: {e}")
+                    return redirect(url_for('home'))
+                
+                else:
+                    cursor.execute("INSERT INTO admin (email, password) VALUES (%s,%s);", (email,password))
+                    mysql.connection.commit()
+                    cursor.close()
+                    return redirect(url_for('admin'))
+            else:
+                flash("Password and Confirm Password field do not match!")
+                return redirect(url_for('admin'))
+
+
 
 if __name__ == '__main__':
     app.run(host=os.getenv('DOMAIN'),port=80,debug=True)
