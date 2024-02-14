@@ -70,7 +70,7 @@ def createtables():
         cursor.execute("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTO_INCREMENT, wedding_id INTEGER, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL );")
         cursor.execute("CREATE TABLE IF NOT EXISTS wedding_details ( id INT AUTO_INCREMENT PRIMARY KEY, theme VARCHAR(255) NOT NULL, grooms_name VARCHAR(255) NOT NULL, brides_name VARCHAR(255) NOT NULL, wedding_date DATE NOT NULL, wedding_location TEXT NOT NULL, city_name VARCHAR(255) NOT NULL, location_url VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL );")
         cursor.execute("CREATE TABLE IF NOT EXISTS reservation ( id INT AUTO_INCREMENT PRIMARY KEY, wedding_id INT, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, will_attend BOOLEAN, guests VARCHAR(20) NOT NULL, note TEXT );")
-    
+        cursor.execute("CREATE TABLE IF NOT EXISTS admin ( id INT AUTO_INCREMENT PRIMARY KEY, email VARCHAR(255), password VARCHAR(255) );")
     except Exception as e:
         print(f"ERROR OCCURRED: {e}")
         flash(f"ERROR OCCURRED: {e}")
@@ -260,6 +260,9 @@ def create():
                         file_path = os.path.join(folder_path,x)
                         if os.path.isfile(file_path):
                             os.remove(file_path)
+                            if(len(images) == 1):
+                                flash("Images Deleted")
+                                print('Images Deleted')
                         
                 return redirect(url_for('create'))
             else:
@@ -512,7 +515,33 @@ def entries():
 # admin panel
 @app.route('/admin',methods=['POST','GET'])
 def admin():
-    return render_template('admin/index.html')
+    if 'admin' in session:
+        return render_template('admin/index.html')
+    
+    else:
+        try:
+            cursor = mysql.connection.cursor()
+            cursor.execute("SELECT * FROM admin")
+            admin_exists = cursor.fetchall()
+        
+        except Exception as e:
+            flash(f"ERROR OCCURRED: {e}")
+            return redirect(url_for('home'))
+
+        else:
+            if admin_exists:
+                return render_template('admin/login.html')
+            
+            else:
+                return render_template('admin/signup.html')
+
+@app.route('/admin/login')
+def adminlogin():
+    if 'admin' in session:
+        return redirect(url_for('admin'))
+    
+    else:
+        pass
 
 if __name__ == '__main__':
     app.run(host=os.getenv('DOMAIN'),port=80,debug=True)
