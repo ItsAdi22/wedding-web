@@ -597,4 +597,3 @@ def adminlogin():
 
 if __name__ == '__main__':
     app.run(host=os.getenv('DOMAIN'),port=80,debug=True)
-
